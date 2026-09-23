@@ -1,0 +1,132 @@
+<Window x:Class="genpiyi.PinyinPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GenPiYi"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        ResizeMode="NoResize"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="Manual"
+        Left="-10000" Top="-10000"
+        MinWidth="260" MaxWidth="600"
+        FontFamily="Segoe UI Variable Text, Segoe UI">
+
+    <Window.Resources>
+        <!-- Màu mặc định (tối). Được thay trong code theo cài đặt giao diện. -->
+        <SolidColorBrush x:Key="P.Bg" Color="#FA1C2029"/>
+        <SolidColorBrush x:Key="P.Border" Color="#33FFFFFF"/>
+        <SolidColorBrush x:Key="P.Fg" Color="#F3F4F6"/>
+        <SolidColorBrush x:Key="P.Sub" Color="#A0A8B5"/>
+        <SolidColorBrush x:Key="P.Hover" Color="#1FFFFFFF"/>
+        <SolidColorBrush x:Key="P.Chip" Color="#26FFFFFF"/>
+        <SolidColorBrush x:Key="P.Footer" Color="#10FFFFFF"/>
+        <SolidColorBrush x:Key="P.Divider" Color="#1AFFFFFF"/>
+
+        <Style x:Key="PopupIconButton" TargetType="Button">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Margin" Value="1,0"/>
+            <Setter Property="Foreground" Value="{DynamicResource P.Sub}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource P.Hover}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource P.Fg}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="Root" Opacity="0">
+    <Grid.RenderTransform>
+        <TranslateTransform x:Name="CardShift" Y="8"/>
+    </Grid.RenderTransform>
+    <Border x:Name="Card" Margin="16" CornerRadius="12"
+            Background="{DynamicResource P.Bg}" BorderBrush="{DynamicResource P.Border}" BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="24" ShadowDepth="5" Direction="270" Opacity="0.30" Color="#000000"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Hình trang trí theo mẫu giao diện (nằm dưới nội dung) -->
+            <ContentControl x:Name="DecoHost" Grid.RowSpan="4" IsHitTestVisible="False" Focusable="False"/>
+
+            <!-- Thanh tiêu đề: kéo để di chuyển -->
+            <Grid x:Name="Header" Grid.Row="0" Background="Transparent" Margin="14,8,8,2"
+                  MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <ContentControl x:Name="EmblemHost" Focusable="False" VerticalAlignment="Center"/>
+                    <TextBlock Text="Pinyin" Foreground="{DynamicResource P.Fg}" FontSize="12.5" FontWeight="SemiBold"
+                               Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    <Border x:Name="SourceChip" Background="{DynamicResource P.Chip}" CornerRadius="9" Padding="8,1,8,2"
+                            Margin="8,0,0,0" VerticalAlignment="Center" Visibility="Collapsed">
+                        <TextBlock x:Name="SourceLabel" Foreground="{DynamicResource P.Sub}" FontSize="11"/>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnCopyPinyin" Style="{StaticResource PopupIconButton}" Content="&#xE8C8;"
+                            Click="BtnCopyPinyin_Click" ToolTip="{DynamicResource S.common.copyPinyin}"/>
+                    <Button x:Name="BtnCopyBoth" Style="{StaticResource PopupIconButton}" Content="&#xE8C1;"
+                            Click="BtnCopyBoth_Click" ToolTip="{DynamicResource S.popup.copyBoth}"/>
+                    <Button x:Name="BtnPin" Style="{StaticResource PopupIconButton}" Content="&#xE718;"
+                            Click="BtnPin_Click" ToolTip="{DynamicResource S.popup.pin}"/>
+                    <Button Style="{StaticResource PopupIconButton}" Content="&#xE711;" FontSize="11"
+                            Click="BtnClose_Click" ToolTip="{DynamicResource S.popup.close}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Nội dung: pinyin trên chữ Hán -->
+            <ScrollViewer Grid.Row="1" MaxHeight="400" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled" Margin="12,6,10,8">
+                <ContentControl x:Name="RubyHost"/>
+            </ScrollViewer>
+
+            <TextBlock x:Name="ErrorLabel" Grid.Row="2" Foreground="#FFB454" FontSize="12"
+                       Margin="16,0,16,8" TextWrapping="Wrap" Visibility="Collapsed"/>
+
+            <!-- Chuỗi pinyin thuần (bôi đen để copy được) -->
+            <Border x:Name="FooterBorder" Grid.Row="3" Background="{DynamicResource P.Footer}" BorderBrush="{DynamicResource P.Divider}"
+                    BorderThickness="0,1,0,0" CornerRadius="0,0,12,12" Padding="12,7,12,9">
+                <TextBox x:Name="PlainPinyin" IsReadOnly="True" BorderThickness="0" Background="Transparent"
+                         Foreground="{DynamicResource P.Sub}" FontSize="12.5" TextWrapping="Wrap"
+                         SelectionBrush="#E5484D" CaretBrush="Transparent" FocusVisualStyle="{x:Null}"
+                         MaxWidth="530" HorizontalAlignment="Left"/>
+            </Border>
+        </Grid>
+    </Border>
+
+    <!-- Tai mèo (mẫu Mèo mướp) nhô lên trên mép thẻ -->
+    <ContentControl x:Name="EarsHost" Margin="30,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    IsHitTestVisible="False" Focusable="False"/>
+    </Grid>
+</Window>

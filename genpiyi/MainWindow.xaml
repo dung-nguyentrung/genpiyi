@@ -1,0 +1,446 @@
+<Window x:Class="genpiyi.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GenPiYi"
+        Width="900" Height="660" MinWidth="740" MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" ResizeMode="CanResize"
+        Background="{StaticResource BgBrush}"
+        Foreground="{StaticResource TextBrush}"
+        FontFamily="{StaticResource UiFont}" FontSize="13"
+        UseLayoutRounding="True">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40" ResizeBorderThickness="6" GlassFrameThickness="0"
+                      CornerRadius="0" UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+
+    <Border x:Name="RootBorder" BorderBrush="#D0D5DC" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ============ Thanh tiêu đề ============ -->
+            <Grid Grid.ColumnSpan="2">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                    <Image x:Name="LogoImage" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <TextBlock Text="GenPiYi" FontWeight="SemiBold" FontSize="12.5" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource S.app.tagline}" FontSize="12" Foreground="{StaticResource TextMutedBrush}"
+                               Margin="10,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Button x:Name="BtnLang" Style="{StaticResource CaptionButton}" Width="58" Click="BtnLang_Click"
+                            WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="{DynamicResource S.cap.lang}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE774;" FontFamily="{StaticResource IconFont}" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="LangLabel" Text="VI" FontFamily="{StaticResource UiFont}" FontSize="11.5"
+                                       FontWeight="SemiBold" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource CaptionButton}" Content="&#xE921;" Click="BtnMinimize_Click"
+                            WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="{DynamicResource S.cap.min}"/>
+                    <Button Style="{StaticResource CaptionCloseButton}" Content="&#xE8BB;" Click="BtnClose_Click"
+                            WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="{DynamicResource S.cap.close}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- ============ Thanh điều hướng ============ -->
+            <DockPanel Grid.Row="1" Grid.Column="0" Margin="12,6,10,14">
+                <StackPanel DockPanel.Dock="Bottom">
+                    <Border x:Name="EnginePill" CornerRadius="8" Padding="10,8" Background="#EAF7EF">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse x:Name="EngineDot" Width="8" Height="8" Fill="#1E9E5A" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="EngineText" Text="{DynamicResource S.engine.ok}" FontSize="12" Margin="8,0,0,0"
+                                       Foreground="#17693D" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="160"/>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock x:Name="VersionText" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="4,8,0,0"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <RadioButton x:Name="NavTry" Style="{StaticResource NavButton}" Tag="&#xE8C1;" Content="{DynamicResource S.nav.try}"
+                                 IsChecked="True" Checked="Nav_Checked"/>
+                    <RadioButton x:Name="NavTheme" Style="{StaticResource NavButton}" Tag="&#xE790;" Content="{DynamicResource S.nav.theme}"
+                                 Checked="Nav_Checked"/>
+                    <RadioButton x:Name="NavSettings" Style="{StaticResource NavButton}" Tag="&#xE713;" Content="{DynamicResource S.nav.settings}"
+                                 Checked="Nav_Checked"/>
+                    <RadioButton x:Name="NavGuide" Style="{StaticResource NavButton}" Tag="&#xE897;" Content="{DynamicResource S.nav.guide}"
+                                 Checked="Nav_Checked"/>
+                </StackPanel>
+            </DockPanel>
+
+            <!-- ============ Nội dung ============ -->
+            <Grid Grid.Row="1" Grid.Column="1">
+
+                <!-- Trang: Tra pinyin -->
+                <ScrollViewer x:Name="PageTry" VerticalScrollBarVisibility="Auto" Padding="10,4,28,24">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource S.nav.try}" Style="{StaticResource PageTitle}"/>
+                        <TextBlock Style="{StaticResource PageSubtitle}"
+                                   Text="{DynamicResource S.try.subtitle}"/>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,10">
+                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                        <Button Style="{StaticResource GhostButton}" Click="BtnPaste_Click" ToolTip="{DynamicResource S.try.pasteTip}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="&#xE77F;" FontFamily="{StaticResource IconFont}" FontSize="13" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{DynamicResource S.try.paste}" Margin="6,0,0,0"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Style="{StaticResource GhostButton}" Click="BtnClear_Click" ToolTip="{DynamicResource S.try.clearTip}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="&#xE74D;" FontFamily="{StaticResource IconFont}" FontSize="13" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{DynamicResource S.try.clear}" Margin="6,0,0,0"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                    <TextBlock Text="{DynamicResource S.try.input}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </DockPanel>
+                                <TextBox x:Name="InputBox" Style="{StaticResource ModernTextBox}"
+                                         AcceptsReturn="True" TextWrapping="Wrap" Height="92"
+                                         FontFamily="{StaticResource HanziFont}" FontSize="16"
+                                         VerticalScrollBarVisibility="Auto"
+                                         Tag="{DynamicResource S.try.placeholder}"
+                                         TextChanged="InputBox_TextChanged"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}" Margin="0,12,0,0" Padding="0">
+                            <StackPanel>
+                                <DockPanel Margin="18,14,14,6">
+                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                        <Button Style="{StaticResource SecondaryButton}" Click="BtnPreviewPopup_Click" Margin="0,0,8,0"
+                                                ToolTip="{DynamicResource S.try.previewTip}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="&#xE8A7;" FontFamily="{StaticResource IconFont}" FontSize="12" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{DynamicResource S.try.preview}" Margin="7,0,0,0"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button x:Name="BtnCopy" Style="{StaticResource PrimaryButton}" Click="BtnCopy_Click">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock x:Name="BtnCopyIcon" Text="&#xE8C8;" FontFamily="{StaticResource IconFont}" FontSize="12" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="BtnCopyText" Text="{DynamicResource S.common.copyPinyin}" Margin="7,0,0,0"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                    <TextBlock Text="{DynamicResource S.try.result}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </DockPanel>
+
+                                <ScrollViewer MaxHeight="280" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                              Margin="14,4,14,10" MinHeight="70">
+                                    <ContentControl x:Name="PreviewHost"/>
+                                </ScrollViewer>
+
+                                <Border Background="#F8F9FA" BorderBrush="{StaticResource DividerBrush}" BorderThickness="0,1,0,0"
+                                        CornerRadius="0,0,8,8" Padding="18,10">
+                                    <TextBox x:Name="PlainBox" IsReadOnly="True" TextWrapping="Wrap" BorderThickness="0"
+                                             Background="Transparent" Foreground="{StaticResource TextSubBrush}" FontSize="13"
+                                             SelectionBrush="{StaticResource AccentBrush}" FocusVisualStyle="{x:Null}"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Trang: Cài đặt -->
+                <ScrollViewer x:Name="PageSettings" VerticalScrollBarVisibility="Auto" Padding="10,4,28,24" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource S.nav.settings}" Style="{StaticResource PageTitle}"/>
+                        <TextBlock Style="{StaticResource PageSubtitle}" Text="{DynamicResource S.set.subtitle}"/>
+
+                        <TextBlock Text="{DynamicResource S.set.groupActivity}" Style="{StaticResource GroupHeader}" Margin="2,0,0,8"/>
+
+                        <!-- Tự hiện khi copy -->
+                        <Border Style="{StaticResource SettingRow}">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE8C8;"/>
+                                <CheckBox x:Name="ChkAuto" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                                          Checked="Setting_Changed" Unchecked="Setting_Changed"/>
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                    <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.auto}"/>
+                                    <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.autoDesc}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Chỉ với app chat -->
+                        <Border Style="{StaticResource SettingRow}">
+                            <StackPanel>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE8BD;"/>
+                                    <CheckBox x:Name="ChkChatOnly" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                                              Checked="Setting_Changed" Unchecked="Setting_Changed"/>
+                                    <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.chatOnly}"/>
+                                        <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.chatOnlyDesc}"/>
+                                    </StackPanel>
+                                </DockPanel>
+
+                                <StackPanel x:Name="ChatAppsArea" Margin="36,12,0,0">
+                                    <!-- Thanh trạng thái quét -->
+                                    <DockPanel Margin="0,0,0,8">
+                                        <Button x:Name="BtnScan" DockPanel.Dock="Right" Style="{StaticResource GhostButton}"
+                                                Click="BtnScanApps_Click" ToolTip="{DynamicResource S.set.scanTip}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="&#xE72C;" FontFamily="{StaticResource IconFont}" FontSize="12" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{DynamicResource S.set.rescan}" Margin="6,0,0,0"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="ScanStatus" Style="{StaticResource RowDesc}" VerticalAlignment="Center" Margin="0"
+                                                   Text="{DynamicResource S.set.scanning}"/>
+                                    </DockPanel>
+
+                                    <!-- Danh sách app tìm thấy, mỗi dòng có công tắc -->
+                                    <Border BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="8"
+                                            Background="#FAFBFC">
+                                        <StackPanel x:Name="AppRowsPanel"/>
+                                    </Border>
+
+                                    <!-- Thêm app khác -->
+                                    <Button x:Name="BtnShowOthers" Style="{StaticResource GhostButton}" HorizontalAlignment="Left"
+                                            Margin="-8,8,0,0" Click="BtnShowOthers_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock x:Name="ShowOthersIcon" Text="&#xE710;" FontFamily="{StaticResource IconFont}" FontSize="11" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource S.set.addOthers}" Margin="7,0,0,0"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <StackPanel x:Name="OthersArea" Visibility="Collapsed" Margin="0,6,0,0">
+                                        <TextBlock Style="{StaticResource RowDesc}" Margin="0,0,0,6"
+                                                   Text="{DynamicResource S.set.othersDesc}"/>
+                                        <Border BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="8">
+                                            <ScrollViewer MaxHeight="220" VerticalScrollBarVisibility="Auto">
+                                                <StackPanel x:Name="OtherAppsPanel"/>
+                                            </ScrollViewer>
+                                        </Border>
+                                        <DockPanel Margin="0,10,0,0">
+                                            <Button DockPanel.Dock="Right" Style="{StaticResource SecondaryButton}" Content="{DynamicResource S.common.add}"
+                                                    Margin="8,0,0,0" Click="BtnAddApp_Click"/>
+                                            <TextBox x:Name="NewAppBox" Style="{StaticResource ModernTextBox}" Padding="10,5"
+                                                     Tag="{DynamicResource S.set.processPlaceholder}" KeyDown="NewAppBox_KeyDown"/>
+                                        </DockPanel>
+                                        <TextBlock Style="{StaticResource RowDesc}" Margin="0,6,0,0"
+                                                   Text="{DynamicResource S.set.processHint}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Phím tắt -->
+                        <Border Style="{StaticResource SettingRow}">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE765;"/>
+                                <TextBox x:Name="HotkeyBox" DockPanel.Dock="Right" Style="{StaticResource ModernTextBox}"
+                                         Width="190" IsReadOnly="True" IsReadOnlyCaretVisible="False" Cursor="Hand"
+                                         TextAlignment="Center" FontWeight="SemiBold" Padding="8,6"
+                                         VerticalAlignment="Center"
+                                         PreviewKeyDown="HotkeyBox_PreviewKeyDown"
+                                         GotKeyboardFocus="HotkeyBox_GotKeyboardFocus"
+                                         LostKeyboardFocus="HotkeyBox_LostKeyboardFocus"/>
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                    <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.hotkey}"/>
+                                    <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.hotkeyDesc}"/>
+                                    <TextBlock x:Name="HotkeyStatus" FontSize="12" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <TextBlock Text="{DynamicResource S.set.groupDisplay}" Style="{StaticResource GroupHeader}"/>
+
+                        <!-- Kiểu pinyin -->
+                        <Border Style="{StaticResource SettingRow}">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE8D2;"/>
+                                <Border DockPanel.Dock="Right" Style="{StaticResource SegmentHost}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <RadioButton x:Name="RbMark" GroupName="ToneStyle" Style="{StaticResource SegmentButton}"
+                                                     Content="nǐ hǎo" Checked="Setting_Changed"/>
+                                        <RadioButton x:Name="RbNumber" GroupName="ToneStyle" Style="{StaticResource SegmentButton}"
+                                                     Content="ni3 hao3" Checked="Setting_Changed"/>
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                    <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.toneStyle}"/>
+                                    <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.toneStyleDesc}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Cỡ chữ -->
+                        <Border Style="{StaticResource SettingRow}">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE8E9;"/>
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Slider x:Name="FontSlider" Style="{StaticResource ModernSlider}" Width="170"
+                                            Minimum="18" Maximum="44" TickFrequency="2" IsSnapToTickEnabled="True"
+                                            SmallChange="2" LargeChange="4" ValueChanged="FontSlider_ValueChanged"/>
+                                    <TextBlock x:Name="FontLabel" Width="34" TextAlignment="Right" VerticalAlignment="Center"
+                                               Foreground="{StaticResource TextSubBrush}"/>
+                                </StackPanel>
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                    <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.fontSize}"/>
+                                    <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.fontSizeDesc}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Màu thanh điệu -->
+                        <Border Style="{StaticResource SettingRow}">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE790;"/>
+                                <CheckBox x:Name="ChkToneColors" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                                          Checked="Setting_Changed" Unchecked="Setting_Changed"/>
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                    <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.toneColors}"/>
+                                    <StackPanel x:Name="ToneLegend" Orientation="Horizontal" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Giao diện popup -->
+                        <Border Style="{StaticResource SettingRow}">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE790;"/>
+                                <Button DockPanel.Dock="Right" Style="{StaticResource SecondaryButton}" Click="BtnGoTheme_Click" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{DynamicResource S.set.chooseTheme}"/>
+                                        <TextBlock Text="&#xE76C;" FontFamily="{StaticResource IconFont}" FontSize="10" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                    <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.popupTheme}"/>
+                                    <TextBlock Style="{StaticResource RowDesc}">
+                                        <Run Text="{DynamicResource S.set.using}"/><Run x:Name="CurrentThemeName" FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <TextBlock Text="{DynamicResource S.set.groupSystem}" Style="{StaticResource GroupHeader}"/>
+
+                        <!-- Ngôn ngữ -->
+                        <Border Style="{StaticResource SettingRow}">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE774;"/>
+                                <Border DockPanel.Dock="Right" Style="{StaticResource SegmentHost}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <RadioButton x:Name="RbVi" GroupName="Language" Style="{StaticResource SegmentButton}"
+                                                     Content="Tiếng Việt" Checked="Language_Changed"/>
+                                        <RadioButton x:Name="RbEn" GroupName="Language" Style="{StaticResource SegmentButton}"
+                                                     Content="English" Checked="Language_Changed"/>
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                    <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.language}"/>
+                                    <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.languageDesc}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource SettingRow}">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE7E8;"/>
+                                <CheckBox x:Name="ChkStartup" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                                          Checked="Setting_Changed" Unchecked="Setting_Changed"/>
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                    <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.startup}"/>
+                                    <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.startupDesc}"/>
+                                    <TextBlock x:Name="StartupStatus" FontSize="12" Foreground="#D13C40" TextWrapping="Wrap"
+                                               Margin="0,4,0,0" Visibility="Collapsed"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Trang: Giao diện (mẫu popup) -->
+                <ScrollViewer x:Name="PageTheme" VerticalScrollBarVisibility="Auto" Padding="10,4,28,24" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource S.nav.theme}" Style="{StaticResource PageTitle}"/>
+                        <TextBlock Style="{StaticResource PageSubtitle}"
+                                   Text="{DynamicResource S.theme.subtitle}"/>
+
+                        <TextBlock Text="{DynamicResource S.theme.featured}" Style="{StaticResource GroupHeader}" FontSize="16" Margin="2,0,0,12"/>
+                        <WrapPanel x:Name="FeaturedPanel" Margin="0,0,-14,0"/>
+
+                        <TextBlock Text="{DynamicResource S.theme.basic}" Style="{StaticResource GroupHeader}" FontSize="16" Margin="2,10,0,12"/>
+                        <WrapPanel x:Name="BasicPanel" Margin="0,0,-14,0"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Trang: Hướng dẫn -->
+                <ScrollViewer x:Name="PageGuide" VerticalScrollBarVisibility="Auto" Padding="10,4,28,24" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource S.nav.guide}" Style="{StaticResource PageTitle}"/>
+                        <TextBlock Style="{StaticResource PageSubtitle}" Text="{DynamicResource S.guide.subtitle}"/>
+
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+                            <DockPanel>
+                                <Border DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="15" Background="{StaticResource AccentSoftBrush}"
+                                        VerticalAlignment="Top" Margin="0,0,14,0">
+                                    <TextBlock Text="1" Foreground="{StaticResource AccentBrush}" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource RowTitle}" FontWeight="SemiBold" Text="{DynamicResource S.guide.s1}"/>
+                                    <TextBlock Style="{StaticResource RowDesc}" Margin="0,4,0,0"
+                                               Text="{DynamicResource S.guide.s1Desc}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+                            <DockPanel>
+                                <Border DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="15" Background="{StaticResource AccentSoftBrush}"
+                                        VerticalAlignment="Top" Margin="0,0,14,0">
+                                    <TextBlock Text="2" Foreground="{StaticResource AccentBrush}" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource RowTitle}" FontWeight="SemiBold">
+                                        <Run Text="{DynamicResource S.guide.s2}"/>
+                                        <Run x:Name="GuideHotkey" Foreground="{StaticResource AccentBrush}"/>
+                                    </TextBlock>
+                                    <TextBlock Style="{StaticResource RowDesc}" Margin="0,4,0,0"
+                                               Text="{DynamicResource S.guide.s2Desc}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+                            <DockPanel>
+                                <Border DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="15" Background="{StaticResource AccentSoftBrush}"
+                                        VerticalAlignment="Top" Margin="0,0,14,0">
+                                    <TextBlock Text="3" Foreground="{StaticResource AccentBrush}" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource RowTitle}" FontWeight="SemiBold" Text="{DynamicResource S.guide.s3}"/>
+                                    <TextBlock Style="{StaticResource RowDesc}" Margin="0,4,0,0"
+                                               Text="{DynamicResource S.guide.s3Desc}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <Border CornerRadius="8" Padding="16,12" Background="#EEF3FE" Margin="0,8,0,0">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Text="&#xE946;" FontFamily="{StaticResource IconFont}" FontSize="16"
+                                           Foreground="#2F6FEB" Margin="0,1,12,0" VerticalAlignment="Top"/>
+                                <TextBlock TextWrapping="Wrap" Foreground="#23407A" FontSize="12.5"
+                                           Text="{DynamicResource S.guide.tray}"/>
+                            </DockPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

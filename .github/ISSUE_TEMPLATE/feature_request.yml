@@ -1,0 +1,14 @@
+name: Feature request / Đề xuất tính năng
+description: Suggest an idea / Góp ý tính năng mới
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like? / Bạn muốn có gì?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why / use case / Vì sao cần?

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <!-- Tắt implicit usings để tránh xung đột tên giữa WPF và WinForms (Application, MessageBox...) -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>genpiyi</RootNamespace>
+    <AssemblyName>GenPiYi</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>GenPiYi.ico</ApplicationIcon>
+    <Product>GenPiYi</Product>
+    <Version>1.2.0</Version>
+    <Authors>GenPiYi contributors</Authors>
+    <Description>Pinyin popup for Chinese chat messages on Windows</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Thư viện chuyển Hán tự -> pinyin (offline, có xử lý từ đa âm theo cụm từ) -->
+    <PackageReference Include="ToolGood.Words.Pinyin" Version="*" />
+  </ItemGroup>
+
+</Project>

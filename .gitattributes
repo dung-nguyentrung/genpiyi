@@ -1,0 +1,23 @@
+# Chuẩn hoá xuống dòng: lưu LF trong repo, Git tự đổi theo hệ điều hành khi checkout
+* text=auto
+
+# Code & project files Visual Studio: giữ CRLF trên Windows
+*.cs       text diff=csharp
+*.xaml     text
+*.csproj   text
+*.props    text
+*.targets  text
+*.sln      text eol=crlf
+*.manifest text
+
+*.md       text
+*.yml      text
+*.json     text
+
+# Nhị phân
+*.png  binary
+*.jpg  binary
+*.gif  binary
+*.ico  binary
+*.dll  binary
+*.exe  binary

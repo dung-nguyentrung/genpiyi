@@ -1,0 +1,37 @@
+name: Bug report / Báo lỗi
+description: Something doesn't work / Có gì đó không chạy đúng
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened? / Chuyện gì xảy ra?
+      description: Steps to reproduce, what you expected, what you saw. / Các bước tái hiện, mong đợi và thực tế.
+    validations:
+      required: true
+  - type: input
+    id: chatapp
+    attributes:
+      label: Chat app & version / App chat và phiên bản
+      placeholder: e.g. WeChat 4.0.5 (Weixin.exe), Zalo 24.9
+  - type: input
+    id: text
+    attributes:
+      label: Text you copied / Đoạn chữ đã copy
+      placeholder: 你好世界
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version / Phiên bản Windows
+      placeholder: Windows 11 23H2
+  - type: input
+    id: version
+    attributes:
+      label: GenPiYi version
+      placeholder: 1.2.0
+  - type: textarea
+    id: log
+    attributes:
+      label: error.log
+      description: Contents of %AppData%\GenPiYi\error.log (if any) / Nội dung file log lỗi (nếu có)
+      render: text
