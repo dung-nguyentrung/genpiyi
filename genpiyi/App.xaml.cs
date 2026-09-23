@@ -58,6 +58,14 @@ namespace genpiyi
             }
             Loc.Apply(Settings.Language);
 
+            // Đồng bộ công tắc "Khởi động cùng Windows" với registry (bộ cài đặt có thể đã bật sẵn)
+            bool registered = AppSettings.IsStartupRegistered();
+            if (registered != Settings.StartWithWindows)
+            {
+                Settings.StartWithWindows = registered;
+                Settings.Save();
+            }
+
             _debounce = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(150) };
             _debounce.Tick += (s, a) => { _debounce.Stop(); ProcessClipboard(DateTime.Now < _forceUntil, _pendingProcess); };
 

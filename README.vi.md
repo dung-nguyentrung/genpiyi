@@ -32,7 +32,13 @@ GenPiYi là app nhỏ chạy ở khay hệ thống. Chuột phải vào tin nh�
 
 ## Tải về
 
-Vào [**Releases**](https://github.com/dung-nguyentrung/genpiyi/releases/latest), tải `GenPiYi-*-win-x64.exe` (hoặc bản `win-arm64` / `.zip`) rồi chạy luôn. Không cần cài gì thêm vì đã kèm sẵn .NET.
+1. Vào [**Releases**](https://github.com/dung-nguyentrung/genpiyi/releases/latest), tải file **`GenPiYi-Setup-….exe`**.
+2. Mở file, bấm **Install**. Không cần quyền quản trị, không cần cài thêm .NET.
+3. Cài xong app tự chạy, lần sau mở từ Start Menu.
+
+Nếu Windows hiện *"Windows protected your PC"*, bấm **More info → Run anyway**. Cảnh báo này xuất hiện vì app chưa mua chữ ký số.
+
+Không muốn cài? Tải bản `GenPiYi-…-win-x64.exe` và chạy trực tiếp.
 
 ## Cách dùng
 

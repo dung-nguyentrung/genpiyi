@@ -44,7 +44,13 @@ GenPiYi is a small tray app. Right-click a Chinese message in your chat app, cho
 
 ## Download
 
-Download `GenPiYi-*-win-x64.exe` (or the `win-arm64` / `.zip` variants) from [**Releases**](https://github.com/dung-nguyentrung/genpiyi/releases/latest), and run it. You don't need to install anything, because the .NET runtime is bundled.
+1. Open [**Releases**](https://github.com/dung-nguyentrung/genpiyi/releases/latest) and download **`GenPiYi-Setup-….exe`**.
+2. Open the file and click **Install**. No admin rights needed, and .NET is bundled.
+3. GenPiYi starts right away, and you can also find it in the Start menu.
+
+If Windows shows *"Windows protected your PC"*, click **More info → Run anyway**. The app isn't code-signed yet.
+
+Prefer not to install? Download `GenPiYi-…-win-x64.exe` (portable) and just run it.
 
 ## Usage
 

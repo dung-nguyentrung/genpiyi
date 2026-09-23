@@ -1,7 +1,7 @@
 name: Release
 
-# Tạo bản phát hành khi push tag dạng v1.2.0:
-#   git tag v1.2.0 && git push origin v1.2.0
+# Tạo bản phát hành khi push tag dạng v0.0.2:
+#   git tag v0.0.2 && git push origin v0.0.2
 on:
   push:
     tags: ['v*']
@@ -38,6 +38,19 @@ jobs:
             Copy-Item "publish/$rid/GenPiYi.exe" "GenPiYi-${{ github.ref_name }}-$rid.exe" -Force
           }
 
+      - name: Build installer (Inno Setup)
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          if (-not ($version -match '^\d+\.\d+\.\d+')) { $version = "0.0.0" }
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            choco install innosetup -y --no-progress | Out-Null
+          }
+          & $iscc /Qp "/DAppVersion=$version" "/DSourceDir=..\publish\win-x64" installer\GenPiYi.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Copy-Item "dist\GenPiYi-Setup-$version.exe" "GenPiYi-Setup-${{ github.ref_name }}.exe" -Force
+
       - name: Upload to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
@@ -46,6 +59,27 @@ jobs:
             GenPiYi-*.exe
             GenPiYi-*.zip
           generate_release_notes: true
+          body: |
+            ## ⬇️ Tải về / Download
+
+            **👉 Hầu hết mọi người: tải `GenPiYi-Setup-${{ github.ref_name }}.exe`** (ở mục *Assets* bên dưới), mở file và bấm **Install**.
+            Không cần quyền quản trị, không cần cài thêm gì. Sau khi cài, GenPiYi có trong Start Menu.
+
+            **👉 Most people: download `GenPiYi-Setup-${{ github.ref_name }}.exe`** below, open it and click **Install**. No admin rights or extra downloads needed.
+
+            | File | Dành cho / For |
+            |---|---|
+            | `GenPiYi-Setup-….exe` | ⭐ Bộ cài đặt (khuyên dùng) / Installer (recommended) |
+            | `GenPiYi-…-win-x64.exe` | Bản chạy ngay, không cần cài / Portable, no install |
+            | `GenPiYi-…-win-arm64.exe` | Máy chip ARM (Snapdragon…) / ARM PCs |
+            | `.zip` | Bản nén của bản chạy ngay / Portable, zipped |
+
+            > **Windows hiện "Windows protected your PC"?** Bấm **More info → Run anyway**. Cảnh báo này xuất hiện vì app chưa mua chữ ký số, không phải virus — mã nguồn mở hoàn toàn tại repo này.
+            > **"Windows protected your PC"?** Click **More info → Run anyway** — the app isn't code-signed yet; the full source code is in this repo.
+
+            ### Cách dùng nhanh / Quick start
+            1. Mở Zalo / WeChat / LINE, **chuột phải vào tin nhắn tiếng Trung → Sao chép** — pinyin hiện ngay cạnh chuột.
+            2. Hoặc bôi đen chữ ở bất kỳ đâu rồi bấm **Ctrl + Alt + P**.
 
       - name: Upload artifacts (manual run)
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
@@ -55,3 +89,4 @@ jobs:
           path: |
             GenPiYi-*.exe
             GenPiYi-*.zip
+            dist/*.exe

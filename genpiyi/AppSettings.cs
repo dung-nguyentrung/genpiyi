@@ -116,6 +116,17 @@ namespace genpiyi
         private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
         private const string RunName = "GenPiYi";
 
+        /// <summary>Đang có khoá "khởi động cùng Windows" trong registry không (bộ cài có thể đã bật sẵn).</summary>
+        public static bool IsStartupRegistered()
+        {
+            try
+            {
+                using var key = Registry.CurrentUser.OpenSubKey(RunKey);
+                return key?.GetValue(RunName) is string v && v.Length > 0;
+            }
+            catch { return false; }
+        }
+
         public static void ApplyStartup(bool enable)
         {
             try
