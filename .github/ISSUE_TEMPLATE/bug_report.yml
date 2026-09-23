@@ -28,7 +28,7 @@ body:
     id: version
     attributes:
       label: GenPiYi version
-      placeholder: 1.2.0
+      placeholder: 0.0.2
   - type: textarea
     id: log
     attributes:

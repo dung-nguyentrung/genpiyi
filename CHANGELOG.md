@@ -2,7 +2,12 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/), versions follow [SemVer](https://semver.org/).
 
-## [1.2.0] - 2026-09-23
+## [0.0.2] - Unreleased
+
+### Added
+- Releases now include standalone `.exe` files (win-x64, win-arm64) next to the zip archives.
+
+## [0.0.1] - 2026-09-23
 
 First public release.
 

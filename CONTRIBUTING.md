@@ -6,7 +6,7 @@ Thanks for your interest! / Cảm ơn bạn đã muốn đóng góp! Issues and 
 
 | Branch | Purpose |
 |---|---|
-| `main` | Stable code. Every release tag (`v1.2.0`, …) is cut from here. **No direct pushes.** |
+| `main` | Stable code. Every release tag (`v0.0.2`, …) is cut from here. **No direct pushes.** |
 | `develop` | Integration branch: all feature/fix PRs target this branch. |
 | `feature/<short-name>` | New features, e.g. `feature/ocr`, `feature/theme-sunset` |
 | `fix/<short-name>` | Bug fixes, e.g. `fix/wechat4-detect` |
