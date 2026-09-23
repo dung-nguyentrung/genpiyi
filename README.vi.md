@@ -32,7 +32,7 @@ GenPiYi là app nhỏ chạy ở khay hệ thống. Chuột phải vào tin nh�
 
 ## Tải về
 
-Vào [**Releases**](https://github.com/dung-nguyentrung/genpiyi/releases/latest), tải `GenPiYi-*-win-x64.zip` (hoặc bản `win-arm64`), giải nén rồi chạy `GenPiYi.exe`. Không cần cài gì thêm vì đã kèm sẵn .NET.
+Vào [**Releases**](https://github.com/dung-nguyentrung/genpiyi/releases/latest), tải `GenPiYi-*-win-x64.exe` (hoặc bản `win-arm64` / `.zip`) rồi chạy luôn. Không cần cài gì thêm vì đã kèm sẵn .NET.
 
 ## Cách dùng
 

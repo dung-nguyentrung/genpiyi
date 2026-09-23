@@ -34,13 +34,17 @@ jobs:
               -p:Version=$version `
               -o "publish/$rid"
             Compress-Archive -Path "publish/$rid/*" -DestinationPath "GenPiYi-${{ github.ref_name }}-$rid.zip" -Force
+            # Kèm file .exe chạy trực tiếp (single-file, đã gói sẵn .NET)
+            Copy-Item "publish/$rid/GenPiYi.exe" "GenPiYi-${{ github.ref_name }}-$rid.exe" -Force
           }
 
       - name: Upload to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: GenPiYi-*.zip
+          files: |
+            GenPiYi-*.exe
+            GenPiYi-*.zip
           generate_release_notes: true
 
       - name: Upload artifacts (manual run)
@@ -48,4 +52,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: GenPiYi-build
-          path: GenPiYi-*.zip
+          path: |
+            GenPiYi-*.exe
+            GenPiYi-*.zip
