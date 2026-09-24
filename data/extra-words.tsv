@@ -1,0 +1,61 @@
+# GenPiYi – bổ sung từ/cụm từ hay dùng khi nhắn tin mà CVDICT/CC-CEDICT chưa có.
+# Do cộng đồng GenPiYi biên soạn (phát hành chung giấy phép CC BY-SA 4.0 với file từ điển).
+# Định dạng (TAB): giản thể  phồn thể  pinyin số  nghĩa tiếng Việt (cách nhau " ; ")  nghĩa tiếng Anh
+# Chỉ được dùng khi từ điển gốc CHƯA có từ đó. Muốn thêm từ: thêm dòng rồi chạy python tools/build_dict.py --offline
+好的	好的	hao3 de5	được ; vâng ; ok	OK ; all right ; sure
+好吧	好吧	hao3 ba5	thôi được ; ừ, được rồi	all right then ; fine
+好啊	好啊	hao3 a5	được đấy ; hay đó ; ừ	sure ; great ; OK
+好呀	好呀	hao3 ya5	được nha ; hay quá	sure ; great
+好嘞	好嘞	hao3 lei5	được rồi ; ok nhé	OK ; will do
+好了	好了	hao3 le5	xong rồi ; được rồi ; thôi được rồi	done ; all right ; that's enough
+对的	對的	dui4 de5	đúng rồi ; đúng vậy	that's right ; correct
+对啊	對啊	dui4 a5	đúng đó ; phải đó	right ; exactly
+是吗	是嗎	shi4 ma5	vậy à? ; thế sao?	really? ; is that so?
+行吧	行吧	xing2 ba5	thôi được ; được thôi	fine ; all right then
+行了	行了	xing2 le5	được rồi ; thôi đủ rồi	that's fine ; that'll do
+行不行	行不行	xing2 bu5 xing2	được không?	will it do? ; is it OK?
+够了	夠了	gou4 le5	đủ rồi	that's enough
+可以的	可以的	ke3 yi3 de5	được mà ; được đấy	sure ; no problem
+可以吗	可以嗎	ke3 yi3 ma5	được không?	is it OK? ; may I?
+还没	還沒	hai2 mei2	vẫn chưa ; chưa	not yet
+还没有	還沒有	hai2 mei2 you3	vẫn chưa ; vẫn chưa có	not yet ; still don't have
+谢谢你	謝謝你	xie4 xie5 ni3	cảm ơn bạn	thank you
+谢啦	謝啦	xie4 la5	cảm ơn nhé	thanks
+不用了	不用了	bu4 yong4 le5	không cần đâu ; thôi khỏi	no need ; no thanks
+明白了	明白了	ming2 bai5 le5	hiểu rồi	understood ; got it
+在吗	在嗎	zai4 ma5	có đó không? ; bạn có ở đó không?	are you there?
+在不在	在不在	zai4 bu5 zai4	có ở đó không?	are you there (or not)?
+在干嘛	在幹嘛	zai4 gan4 ma2	đang làm gì thế?	what are you doing?
+你呢	你呢	ni3 ne5	còn bạn? ; còn bạn thì sao?	and you? ; what about you?
+我也是	我也是	wo3 ye3 shi4	tôi cũng vậy ; mình cũng thế	me too ; so am I
+我知道	我知道	wo3 zhi1 dao4	tôi biết	I know
+不知道	不知道	bu4 zhi1 dao4	không biết	don't know
+太棒了	太棒了	tai4 bang4 le5	tuyệt quá ; giỏi quá	awesome ; great
+辛苦了	辛苦了	xin1 ku3 le5	vất vả rồi ; cảm ơn bạn đã vất vả	thanks for your hard work
+麻烦你了	麻煩你了	ma2 fan5 ni3 le5	làm phiền bạn rồi ; nhờ bạn nhé	sorry to trouble you ; thanks for your help
+吃饭了吗	吃飯了嗎	chi1 fan4 le5 ma5	ăn cơm chưa?	have you eaten?
+吃了吗	吃了嗎	chi1 le5 ma5	ăn chưa?	have you eaten?
+睡了吗	睡了嗎	shui4 le5 ma5	ngủ chưa?	are you asleep?
+嗯嗯	嗯嗯	en4 en4	ừ ừ ; vâng vâng	uh-huh ; yes
+真的吗	真的嗎	zhen1 de5 ma5	thật không? ; thật à?	really?
+要不要	要不要	yao4 bu5 yao4	có muốn không? ; có cần không?	do you want (it)? ; should (we)?
+多少钱	多少錢	duo1 shao5 qian2	bao nhiêu tiền?	how much (does it cost)?
+发给你	發給你	fa1 gei3 ni3	gửi cho bạn	send (it) to you
+没空	沒空	mei2 kong4	không rảnh	not free ; busy
+别担心	別擔心	bie2 dan1 xin1	đừng lo	don't worry
+走吧	走吧	zou3 ba5	đi thôi	let's go
+来吧	來吧	lai2 ba5	đến đi ; nào	come on
+想你	想你	xiang3 ni3	nhớ bạn	miss you
+想你了	想你了	xiang3 ni3 le5	nhớ bạn rồi	I miss you
+爱你	愛你	ai4 ni3	yêu bạn	love you
+我爱你	我愛你	wo3 ai4 ni3	anh yêu em ; em yêu anh ; tôi yêu bạn	I love you
+早点睡	早點睡	zao3 dian3 shui4	ngủ sớm đi	go to bed early
+好好休息	好好休息	hao3 hao3 xiu1 xi5	nghỉ ngơi cho tốt nhé	get some good rest
+注意安全	注意安全	zhu4 yi4 an1 quan2	chú ý an toàn	be careful ; stay safe
+路上小心	路上小心	lu4 shang5 xiao3 xin1	đi đường cẩn thận	take care on the way
+发消息	發消息	fa1 xiao1 xi5	gửi tin nhắn	send a message
+回消息	回消息	hui2 xiao1 xi5	trả lời tin nhắn	reply to a message
+看到了	看到了	kan4 dao4 le5	thấy rồi ; xem rồi	saw it ; seen
+没看到	沒看到	mei2 kan4 dao4	không thấy ; chưa xem	didn't see (it)
+忘了	忘了	wang4 le5	quên rồi ; quên mất	forgot
+别忘了	別忘了	bie2 wang4 le5	đừng quên	don't forget

@@ -34,6 +34,7 @@ import zlib
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE = os.path.join(ROOT, "tools", ".dict-cache")
 OUT = os.path.join(ROOT, "data", "genpiyi-dict.tsv.deflate")
+EXTRA = os.path.join(ROOT, "data", "extra-words.tsv")  # từ/cụm từ nhắn tin bổ sung (tự biên soạn)
 
 SOURCES = {
     "cedict": ["https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip"],
@@ -124,6 +125,21 @@ def parse_unihan(text: str) -> dict[str, list[str]]:
     return hv
 
 
+def read_extra():
+    if not os.path.exists(EXTRA):
+        return []
+    rows = []
+    with open(EXTRA, encoding="utf-8") as f:
+        for line in f:
+            line = line.rstrip("\n")
+            if not line or line.startswith("#"):
+                continue
+            p = line.split("\t")
+            if len(p) >= 5:
+                rows.append(((p[1], p[0], p[2]), (p[3], p[4])))
+    return rows
+
+
 def is_han(ch: str) -> bool:
     c = ord(ch)
     return (0x4E00 <= c <= 0x9FFF or 0x3400 <= c <= 0x4DBF or 0xF900 <= c <= 0xFAFF
@@ -157,6 +173,14 @@ def build(cedict_text: str, cvdict_text: str, unihan_text: str) -> str:
                 hv[s_] = hv[t]
             elif t not in hv and s_ in hv:
                 hv[t] = hv[s_]
+
+    # Bổ sung các cụm từ hay dùng khi chat mà từ điển gốc chưa có (好的, 还没, 在吗…)
+    known = {k[1] for k in list(en) + list(vi)} | {k[0] for k in list(en) + list(vi)}
+    for (trad, simp, py), (v, e) in read_extra():
+        if simp in known or trad in known:
+            continue
+        vi[(trad, simp, py)] = [x.strip() for x in v.split(";") if x.strip()]
+        en[(trad, simp, py)] = [x.strip() for x in e.split(";") if x.strip()]
 
     order = {k: i for i, k in enumerate(list(en) + [k for k in vi if k not in en])}
     rows = []

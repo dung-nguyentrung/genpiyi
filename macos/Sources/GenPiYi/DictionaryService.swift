@@ -102,26 +102,45 @@ enum DictionaryService {
         return parts.isEmpty ? nil : parts.joined(separator: " ")
     }
 
-    /// Tách cụm chữ Hán thành từ (so khớp dài nhất từ trái sang). Trả về độ dài từng từ.
+    /// Tách cụm chữ Hán thành từ bằng so khớp dài nhất hai chiều (xuôi & ngược; chọn cách ít từ hơn,
+    /// rồi ít chữ lẻ hơn; hoà thì lấy chiều ngược). Vd 研究生命 → 研究|生命. Trả về độ dài từng từ.
     static func segment(_ chars: [String]) -> [Int] {
         ensureLoaded()
-        var out: [Int] = []
+        guard !words.isEmpty, chars.count >= 2 else { return Array(repeating: 1, count: chars.count) }
+
+        var fw: [Int] = []
         var i = 0
         while i < chars.count {
             var best = 1
-            if !words.isEmpty {
-                let maxLen = min(maxWordLength, chars.count - i)
-                if maxLen >= 2 {
-                    for len in stride(from: maxLen, through: 2, by: -1) where words[chars[i..<(i + len)].joined()] != nil {
-                        best = len
-                        break
-                    }
+            let maxLen = min(maxWordLength, chars.count - i)
+            if maxLen >= 2 {
+                for len in stride(from: maxLen, through: 2, by: -1) where words[chars[i..<(i + len)].joined()] != nil {
+                    best = len
+                    break
                 }
             }
-            out.append(best)
+            fw.append(best)
             i += best
         }
-        return out
+
+        var bw: [Int] = []
+        var j = chars.count
+        while j > 0 {
+            var best = 1
+            let maxLen = min(maxWordLength, j)
+            if maxLen >= 2 {
+                for len in stride(from: maxLen, through: 2, by: -1) where words[chars[(j - len)..<j].joined()] != nil {
+                    best = len
+                    break
+                }
+            }
+            bw.insert(best, at: 0)
+            j -= best
+        }
+
+        if fw.count != bw.count { return fw.count < bw.count ? fw : bw }
+        let sf = fw.filter { $0 == 1 }.count, sb = bw.filter { $0 == 1 }.count
+        return sf < sb ? fw : bw
     }
 
     /// "yin2 hang2" / ["yín","háng"] → "yin2hang2"

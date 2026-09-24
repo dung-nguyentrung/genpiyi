@@ -151,29 +151,45 @@ namespace genpiyi
         }
 
         /// <summary>
-        /// Tách một cụm chữ Hán liền nhau thành từ bằng so khớp dài nhất từ trái sang (forward maximum matching).
-        /// Trả về độ dài (tính theo số chữ) của từng từ.
+        /// Tách một cụm chữ Hán liền nhau thành từ bằng so khớp dài nhất hai chiều
+        /// (xuôi và ngược, chọn cách tách ít từ hơn / ít chữ lẻ hơn; hoà thì lấy chiều ngược).
+        /// Vd 研究生命 → 研究|生命 (không phải 研究生|命). Trả về độ dài (số chữ) của từng từ.
         /// </summary>
         public static List<int> Segment(IReadOnlyList<string> chars)
         {
             EnsureLoaded();
-            var result = new List<int>();
-            int i = 0;
-            while (i < chars.Count)
+            if (_words.Count == 0 || chars.Count < 2) return Enumerable.Repeat(1, chars.Count).ToList();
+
+            var fw = new List<int>();
+            for (int i = 0; i < chars.Count;)
             {
                 int best = 1;
-                if (_words.Count > 0)
-                {
-                    int max = Math.Min(MaxWordLength, chars.Count - i);
-                    for (int len = max; len >= 2; len--)
-                    {
-                        if (_words.ContainsKey(string.Concat(chars.Skip(i).Take(len)))) { best = len; break; }
-                    }
-                }
-                result.Add(best);
+                for (int len = Math.Min(MaxWordLength, chars.Count - i); len >= 2; len--)
+                    if (_words.ContainsKey(Join(chars, i, len))) { best = len; break; }
+                fw.Add(best);
                 i += best;
             }
-            return result;
+
+            var bw = new List<int>();
+            for (int j = chars.Count; j > 0;)
+            {
+                int best = 1;
+                for (int len = Math.Min(MaxWordLength, j); len >= 2; len--)
+                    if (_words.ContainsKey(Join(chars, j - len, len))) { best = len; break; }
+                bw.Insert(0, best);
+                j -= best;
+            }
+
+            if (fw.Count != bw.Count) return fw.Count < bw.Count ? fw : bw;
+            int sf = fw.Count(x => x == 1), sb = bw.Count(x => x == 1);
+            return sf < sb ? fw : bw;
+
+            static string Join(IReadOnlyList<string> c, int start, int len)
+            {
+                var sb2 = new StringBuilder();
+                for (int k = start; k < start + len; k++) sb2.Append(c[k]);
+                return sb2.ToString();
+            }
         }
 
         /// <summary>Khoá so sánh pinyin: "yin2 hang2" / "yínháng" → "yin2hang2".</summary>
