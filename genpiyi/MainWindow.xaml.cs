@@ -781,6 +781,10 @@ namespace genpiyi
             var vocab = DictionaryService.Available ? DictionaryService.Vocabulary(lines, s.ToneStyle) : new List<WordInfo>();
             VocabCard.Visibility = vocab.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
             VocabPreviewHost.Content = vocab.Count > 0 ? RubyBuilder.BuildVocab(vocab, s, 640, ThemeCatalog.Get("light")) : null;
+            // Chưa có dữ liệu từ điển → nhắc cách tạo, để khỏi tưởng tính năng bị lỗi
+            bool missing = !DictionaryService.Available && PinyinService.ContainsHan(InputBox.Text);
+            DictHint.Text = missing ? Loc.T("set.dictMissing") : "";
+            DictHint.Visibility = missing ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void BtnPaste_Click(object sender, RoutedEventArgs e)

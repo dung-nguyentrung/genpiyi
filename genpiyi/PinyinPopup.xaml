@@ -114,25 +114,24 @@
                 <ContentControl x:Name="RubyHost"/>
             </ScrollViewer>
 
-            <!-- Từ vựng + nghĩa -->
-            <Border x:Name="VocabBorder" Grid.Row="2" BorderBrush="{DynamicResource P.Divider}" BorderThickness="0,1,0,0"
-                    Visibility="Collapsed">
-                <ScrollViewer MaxHeight="230" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
-                              Margin="14,4,10,6">
-                    <ContentControl x:Name="VocabHost"/>
-                </ScrollViewer>
-            </Border>
-
             <TextBlock x:Name="ErrorLabel" Grid.Row="3" Foreground="#FFB454" FontSize="12"
                        Margin="16,0,16,8" TextWrapping="Wrap" Visibility="Collapsed"/>
 
-            <!-- Chuỗi pinyin thuần (bôi đen để copy được) -->
+            <!-- Phần dưới: chuỗi pinyin thuần (bôi đen để copy được) + nghĩa từ vựng -->
             <Border x:Name="FooterBorder" Grid.Row="4" Background="{DynamicResource P.Footer}" BorderBrush="{DynamicResource P.Divider}"
                     BorderThickness="0,1,0,0" CornerRadius="0,0,12,12" Padding="12,7,12,9">
-                <TextBox x:Name="PlainPinyin" IsReadOnly="True" BorderThickness="0" Background="Transparent"
-                         Foreground="{DynamicResource P.Sub}" FontSize="12.5" TextWrapping="Wrap"
-                         SelectionBrush="#E5484D" CaretBrush="Transparent" FocusVisualStyle="{x:Null}"
-                         MaxWidth="530" HorizontalAlignment="Left"/>
+                <StackPanel>
+                    <TextBox x:Name="PlainPinyin" IsReadOnly="True" BorderThickness="0" Background="Transparent"
+                             Foreground="{DynamicResource P.Sub}" FontSize="12.5" TextWrapping="Wrap"
+                             SelectionBrush="#E5484D" CaretBrush="Transparent" FocusVisualStyle="{x:Null}"
+                             MaxWidth="530" HorizontalAlignment="Left"/>
+                    <Border x:Name="VocabBorder" BorderBrush="{DynamicResource P.Divider}" BorderThickness="0,1,0,0"
+                            Margin="0,7,0,0" Padding="2,2,0,0" Visibility="Collapsed">
+                        <ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <ContentControl x:Name="VocabHost"/>
+                        </ScrollViewer>
+                    </Border>
+                </StackPanel>
             </Border>
         </Grid>
     </Border>
