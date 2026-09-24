@@ -105,7 +105,8 @@ def parse_cedict(text: str):
 
 def clean_sense(s: str) -> str:
     s = s.strip().replace("\t", " ")
-    if not s or s.startswith("CL:") or s.startswith("Classifier:"):
+    # bỏ mục lượng từ: "CL:" (CC-CEDICT) / "LT:" (CVDICT)
+    if not s or s.startswith(("CL:", "LT:", "Classifier:")):
         return ""
     return s
 
