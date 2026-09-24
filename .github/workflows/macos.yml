@@ -28,7 +28,7 @@ jobs:
         working-directory: macos
         run: |
           VERSION="${GITHUB_REF_NAME#mac-v}"
-          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then VERSION="0.1.1"; fi
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then VERSION="0.1.2"; fi
           VERSION="$VERSION" ./scripts/build-app.sh
 
       - name: Upload artifacts

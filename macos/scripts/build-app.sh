@@ -10,7 +10,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 ROOT="$(pwd)"
-VERSION="${VERSION:-0.1.1}"
+VERSION="${VERSION:-0.1.2}"
 ARCHS="${ARCHS:-arm64 x86_64}"
 BUNDLE_ID="io.github.dung-nguyentrung.genpiyi"
 APP="$ROOT/dist/GenPiYi.app"

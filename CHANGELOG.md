@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/), versions follow [SemVer](https://semver.org/).
 
+## [0.0.4] - 2026-09-24 (Windows) · mac-v0.1.2 (macOS)
+
+### Fixed
+- Common chat phrases are now kept together as one word with a meaning (好的, 好吧, 还没, 在吗, 谢谢你, 不知道, 多少钱…): added `data/extra-words.tsv`, a hand-written supplement merged into the dictionary.
+- Better word segmentation: bidirectional maximum matching (研究生命 → 研究 | 生命, 他说的确实在理 → 的 | 确实 | 在理).
+
 ## [0.0.3] - 2026-09-24 (Windows) · mac-v0.1.1 (macOS)
 
 ### Added
