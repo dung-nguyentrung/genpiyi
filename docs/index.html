@@ -4,461 +4,549 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GenPiYi – Xem pinyin tin nhắn tiếng Trung</title>
-<meta name="description" content="GenPiYi: copy tin nhắn tiếng Trung trong Zalo, WeChat, LINE… là thấy pinyin ngay cạnh con trỏ chuột. Miễn phí, mã nguồn mở, chạy offline.">
+<meta name="description" content="GenPiYi: sao chép một tin nhắn tiếng Trung trong Zalo, WeChat, LINE… là thấy pinyin và nghĩa từng từ ngay cạnh con trỏ. Miễn phí, mã nguồn mở, chạy offline trên Windows và macOS.">
 <meta property="og:title" content="GenPiYi – Pinyin cho tin nhắn tiếng Trung">
-<meta property="og:description" content="Copy tin nhắn tiếng Trung là thấy pinyin ngay. Miễn phí, mã nguồn mở, cho Windows và macOS.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FF6B6B'/%3E%3Cstop offset='1' stop-color='%23D6363C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='15' fill='url(%23g)'/%3E%3Ctext x='32' y='45' font-size='38' font-weight='700' text-anchor='middle' fill='white' font-family='Microsoft YaHei,PingFang SC,sans-serif'%3E拼%3C/text%3E%3C/svg%3E">
+<meta property="og:description" content="Sao chép tin nhắn tiếng Trung là thấy pinyin và nghĩa. Miễn phí, mã nguồn mở, cho Windows và macOS.">
+<meta name="theme-color" content="#FAFAF8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23C7342F'/%3E%3Ctext x='32' y='45' font-size='38' font-weight='700' text-anchor='middle' fill='white' font-family='PingFang SC,Microsoft YaHei,sans-serif'%3E拼%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  /* Bảng màu: giấy trắng hơi ngả xám, mực đen, đỏ son (màu con dấu 拼), dòng kẻ ô chữ 田字格 */
   :root {
-    --accent: #E5484D; --accent-2: #FF6B6B; --accent-soft: #FDECEC;
-    --bg: #FBFBFC; --bg-alt: #F3F4F6; --card: #FFFFFF; --line: #E6E8EC;
-    --text: #1B1F27; --sub: #5B6573; --muted: #8A94A3;
-    --shadow: 0 12px 40px rgba(20, 24, 33, .10);
-    --radius: 16px;
-    --hanzi: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+    --paper: #FAFAF8;
+    --paper-2: #F1F1EE;
+    --card: #FFFFFF;
+    --ink: #1B1D21;
+    --ink-2: #4A4E55;
+    --muted: #7A7E86;
+    --rule: #E2E2DD;
+    --grid: #EBCFCB;
+    --seal: #C7342F;
+    --seal-ink: #FFFFFF;
+    --seal-soft: #F7E7E5;
+    --t1: #D23B3B; --t2: #C77700; --t3: #1E8A55; --t4: #2C63C9; --t5: #8A8F98;
+    --shadow: 0 1px 2px rgba(20,22,26,.06), 0 12px 32px -12px rgba(20,22,26,.18);
+
     --ui: "Be Vietnam Pro", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --song: "Noto Serif SC", "Songti SC", "SimSun", serif;
+    --hei: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+    color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #111318; --bg-alt: #171A21; --card: #1C2029; --line: #2A2F3A;
-      --text: #EEF0F4; --sub: #A8B0BD; --muted: #7C8594; --accent-soft: #3A1E22;
-      --shadow: 0 12px 40px rgba(0, 0, 0, .45);
+    :root:not([data-theme="light"]) {
+      --paper: #131417; --paper-2: #1A1C20; --card: #1E2025; --ink: #ECEDEF; --ink-2: #B9BCC2; --muted: #8B8F97;
+      --rule: #2C2F35; --grid: #4A2A2A; --seal: #E0524B; --seal-soft: #3A1F1E;
+      --t1: #FF6B66; --t2: #F2A93B; --t3: #4CC98A; --t4: #6FA2FF; --t5: #9AA0A8;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 16px 36px -12px rgba(0,0,0,.6);
+      color-scheme: dark;
     }
   }
+  :root[data-theme="dark"] {
+    --paper: #131417; --paper-2: #1A1C20; --card: #1E2025; --ink: #ECEDEF; --ink-2: #B9BCC2; --muted: #8B8F97;
+    --rule: #2C2F35; --grid: #4A2A2A; --seal: #E0524B; --seal-soft: #3A1F1E;
+    --t1: #FF6B66; --t2: #F2A93B; --t3: #4CC98A; --t4: #6FA2FF; --t5: #9AA0A8;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 16px 36px -12px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 var(--ui); -webkit-font-smoothing: antialiased; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--ui); -webkit-font-smoothing: antialiased; }
   a { color: inherit; }
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
-  .hz { font-family: var(--hanzi); }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--seal); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-inline: 24px; }
+  @media (max-width: 520px) { .wrap { padding-inline: 16px; } }
+  .hz { font-family: var(--hei); }
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  kbd { font: 500 .82em var(--mono); padding: 1px 6px; border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 5px; background: var(--card); white-space: nowrap; }
+  .label { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 
-  /* ---------- Nav ---------- */
-  nav { position: sticky; top: 0; z-index: 20; backdrop-filter: saturate(1.6) blur(14px);
-        background: color-mix(in srgb, var(--bg) 80%, transparent); border-bottom: 1px solid var(--line); }
-  nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; text-decoration: none; }
-  .logo { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; color: #fff;
-          font: 700 19px var(--hanzi); background: linear-gradient(135deg, var(--accent-2), #D6363C);
-          box-shadow: 0 4px 12px rgba(229, 72, 77, .35); }
-  nav .links { display: flex; gap: 22px; margin-left: auto; font-size: 14.5px; }
-  nav .links a { text-decoration: none; color: var(--sub); }
-  nav .links a:hover { color: var(--text); }
-  .lang { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font-size: 13px; }
-  .lang button { border: 0; background: transparent; color: var(--sub); padding: 5px 11px; cursor: pointer; font: inherit; font-weight: 600; }
-  .lang button.on { background: var(--accent); color: #fff; }
-  @media (max-width: 760px) { nav .links { display: none; } .lang { margin-left: auto; } }
+  /* ---------- Thanh trên ---------- */
+  header.top { border-bottom: 1px solid var(--rule); background: var(--paper); }
+  header.top .wrap { display: flex; align-items: center; gap: 28px; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 17px; letter-spacing: -.01em; }
+  .seal { width: 28px; height: 28px; border-radius: 6px; background: var(--seal); color: var(--seal-ink); display: grid; place-items: center; font: 700 16px var(--hei); }
+  nav.links { display: flex; gap: 22px; font-size: 14.5px; }
+  nav.links a { text-decoration: none; color: var(--ink-2); }
+  nav.links a:hover { color: var(--ink); }
+  .lang { margin-left: auto; display: flex; font: 500 12.5px var(--mono); }
+  .lang button { border: 1px solid var(--rule); background: transparent; color: var(--muted); padding: 5px 9px; cursor: pointer; font: inherit; }
+  .lang button:first-child { border-radius: 6px 0 0 6px; }
+  .lang button:last-child { border-radius: 0 6px 6px 0; border-left: 0; }
+  .lang button.on { color: var(--ink); background: var(--card); }
+  @media (max-width: 720px) { nav.links { display: none; } }
 
-  /* ---------- Buttons ---------- */
-  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 12px; font-weight: 700;
-         text-decoration: none; transition: transform .15s, box-shadow .15s, background .15s; font-size: 16px; }
-  .btn-primary { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; box-shadow: 0 8px 24px rgba(229, 72, 77, .35); }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(229, 72, 77, .45); }
-  .btn-ghost { border: 1px solid var(--line); background: var(--card); color: var(--text); }
-  .btn-ghost:hover { transform: translateY(-2px); }
-  .btn small { display: block; font-weight: 500; opacity: .85; font-size: 12.5px; }
-  .btn svg { width: 20px; height: 20px; flex: none; }
+  /* ---------- Nút ---------- */
+  .btn { display: inline-flex; align-items: center; gap: 12px; padding: 12px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; line-height: 1.25; border: 1px solid transparent; transition: background .15s, border-color .15s; }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+  .btn small { display: block; font: 400 12px/1.3 var(--mono); opacity: .75; margin-top: 2px; }
+  .btn-main { background: var(--ink); color: var(--paper); }
+  .btn-main:hover { background: var(--ink-2); }
+  .btn-alt { background: var(--card); color: var(--ink); border-color: var(--rule); }
+  .btn-alt:hover { border-color: var(--muted); }
 
-  /* ---------- Hero ---------- */
-  .hero { padding: 72px 0 56px; position: relative; overflow: hidden; }
-  .hero::before { content: ""; position: absolute; inset: -30% -10% auto auto; width: 620px; height: 620px; border-radius: 50%;
-                  background: radial-gradient(closest-side, rgba(255, 107, 107, .20), transparent); pointer-events: none; }
-  .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
-  @media (max-width: 920px) { .hero .wrap { grid-template-columns: 1fr; } .hero { padding-top: 40px; } }
-  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;
-          background: var(--accent-soft); color: var(--accent); }
-  h1 { font-size: clamp(34px, 5vw, 54px); line-height: 1.12; letter-spacing: -.02em; margin: 18px 0 16px; font-weight: 800; }
-  h1 .grad { background: linear-gradient(135deg, var(--accent-2), #C2255C); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .lead { font-size: 18.5px; color: var(--sub); max-width: 34em; margin: 0 0 28px; }
-  .cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  .meta { margin-top: 16px; font-size: 13.5px; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; }
-  .meta span::before { content: "✓ "; color: #1E9E5A; font-weight: 700; }
+  /* ---------- Mở đầu ---------- */
+  .hero { padding-block: 64px 56px; }
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: 56px; align-items: center; }
+  @media (max-width: 940px) { .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 40px; } .hero { padding-top: 40px; } }
+  .hero h1 { font-size: clamp(32px, 4.4vw, 50px); line-height: 1.1; letter-spacing: -.025em; font-weight: 700; }
+  .hero h1 em { font-style: normal; color: var(--seal); }
+  .hero .lead { margin-top: 18px; font-size: 18px; color: var(--ink-2); max-width: 32em; }
+  .hero .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  .facts { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 6px 18px; font: 400 13px var(--mono); color: var(--muted); }
 
-  /* ---------- Demo (chat + popup) ---------- */
-  .demo { position: relative; height: 420px; }
-  .chat { position: absolute; inset: 0 40px 40px 0; background: var(--card); border: 1px solid var(--line); border-radius: 18px;
-          box-shadow: var(--shadow); overflow: hidden; }
-  .chat-top { height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 14px; border-bottom: 1px solid var(--line); font-size: 13.5px; font-weight: 600; }
-  .chat-top i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); display: inline-block; }
-  .chat-top .who { margin-left: 8px; }
-  .chat-body { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
-  .msg { max-width: 80%; padding: 10px 14px; border-radius: 14px; font-size: 16px; }
-  .msg.in { background: var(--bg-alt); border-top-left-radius: 4px; }
-  .msg.out { background: #95EC69; color: #1B1F27; align-self: flex-end; border-top-right-radius: 4px; }
-  .msg.target { position: relative; animation: highlight 7s infinite; }
-  @keyframes highlight { 0%, 12% { box-shadow: none; } 16%, 100% { box-shadow: 0 0 0 2px var(--accent); } }
+  /* Ảnh minh hoạ sản phẩm: cửa sổ chat + popup */
+  .shot { position: relative; }
+  .chat { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; margin-right: 56px; }
+  .chat-bar { height: 40px; display: flex; align-items: center; gap: 8px; padding-inline: 14px; border-bottom: 1px solid var(--rule); font-size: 13px; font-weight: 600; }
+  .chat-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--rule); }
+  .chat-bar span { margin-left: 6px; }
+  .chat-body { padding: 16px; display: grid; gap: 10px; min-height: 210px; align-content: start; }
+  .msg { max-width: 82%; padding: 9px 13px; border-radius: 12px; font-size: 15px; }
+  .msg.in { background: var(--paper-2); border-top-left-radius: 3px; justify-self: start; }
+  .msg.out { background: #9BE36D; color: #13220B; border-top-right-radius: 3px; justify-self: end; }
+  .msg.sel { box-shadow: 0 0 0 2px var(--seal); }
+  .popup { position: relative; border-radius: 12px; overflow: hidden;
+           background: var(--p-bg); color: var(--p-fg); border: 1px solid var(--p-border); box-shadow: 0 22px 50px -14px rgba(0,0,0,.45);
+           animation: pop .5s .35s both cubic-bezier(.2,.8,.2,1); }
+  @keyframes pop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .shot .popup { width: min(470px, 94%); margin: -64px 0 0 auto; }
+  @media (max-width: 520px) { .chat { margin-right: 0; } .shot .popup { width: 100%; margin-top: -40px; } }
 
-  .ctx { position: absolute; left: 150px; top: 150px; background: var(--card); border: 1px solid var(--line); border-radius: 10px;
-         box-shadow: var(--shadow); padding: 6px; font-size: 13.5px; width: 150px; opacity: 0; animation: ctx 7s infinite; }
-  .ctx div { padding: 6px 10px; border-radius: 6px; }
-  .ctx .copy { animation: ctxsel 7s infinite; }
-  @keyframes ctx { 0%, 14% { opacity: 0; transform: scale(.96); } 18%, 36% { opacity: 1; transform: none; } 40%, 100% { opacity: 0; } }
-  @keyframes ctxsel { 0%, 26% { background: transparent; } 28%, 36% { background: var(--accent-soft); color: var(--accent); } }
-  .cursor { position: absolute; width: 20px; height: 20px; left: 130px; top: 130px; z-index: 5; animation: cur 7s infinite;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
-  @keyframes cur { 0% { transform: translate(120px, 120px); } 12% { transform: translate(0, 0); } 22% { transform: translate(0, 0); }
-                   30% { transform: translate(30px, 58px); } 100% { transform: translate(30px, 58px); } }
+  /* Popup (màu giống app) */
+  .p-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px 2px 14px; font-size: 12.5px; font-weight: 600; }
+  .p-emb { width: 19px; height: 19px; border-radius: 5px; display: grid; place-items: center; color: #fff; font: 700 11px var(--hei); background: linear-gradient(135deg, var(--p-e1), var(--p-e2)); }
+  .p-chip { font-weight: 400; font-size: 11px; padding: 1px 8px; border-radius: 9px; background: var(--p-chip); color: var(--p-sub); }
+  .p-btns { margin-left: auto; display: flex; gap: 2px; color: var(--p-sub); }
+  .p-btns svg { width: 22px; height: 20px; padding: 3px; }
+  .ruby { display: flex; flex-wrap: wrap; padding: 6px 12px 8px; }
+  .ruby .c { display: flex; flex-direction: column; align-items: center; padding: 2px 3px; border-radius: 5px; }
+  .ruby .py { font-size: 12px; line-height: 1.25; min-height: 15px; }
+  .ruby .h { font: 400 25px/1.35 var(--hei); color: var(--p-hanzi); }
+  .ruby .punct .h { font-size: 19px; color: var(--p-sub); align-self: flex-end; }
+  .p-foot { padding: 7px 14px 9px; background: var(--p-foot); border-top: 1px solid var(--p-div); font-size: 12.5px; color: var(--p-sub); }
+  .vocab { margin-top: 7px; border-top: 1px solid var(--p-div); }
+  .vocab div { display: grid; grid-template-columns: 92px 1fr; gap: 12px; padding: 5px 0; border-bottom: 1px solid var(--p-div); }
+  .vocab div:last-child { border-bottom: 0; }
+  .vocab b { font: 500 15px/1.2 var(--hei); color: var(--p-hanzi); }
+  .vocab b small { display: block; font: 400 11px var(--ui); color: var(--p-py); margin-top: 1px; }
+  .vocab span { color: var(--p-fg); }
+  .p1 { color: var(--p-t1); } .p2 { color: var(--p-t2); } .p3 { color: var(--p-t3); } .p4 { color: var(--p-t4); } .p5 { color: var(--p-t5); }
 
-  .popup { position: absolute; right: 0; bottom: 0; width: min(420px, 92%); border-radius: var(--p-radius, 14px);
-           background: var(--p-bg); border: 1px solid var(--p-border); color: var(--p-fg);
-           box-shadow: 0 18px 50px rgba(0, 0, 0, .28); overflow: hidden; opacity: 0; animation: pop 7s infinite; z-index: 4; }
-  @keyframes pop { 0%, 38% { opacity: 0; transform: translateY(10px); } 44%, 95% { opacity: 1; transform: none; } 100% { opacity: 0; } }
-  .demo.static .popup, .demo.static .ctx { animation: none; } .demo.static .popup { opacity: 1; }
-  .demo.static .cursor { display: none; }
-  .p-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px 4px 14px; font-size: 12.5px; font-weight: 700; }
-  .p-emb { width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; color: #fff; font: 700 11px var(--hanzi);
-           background: linear-gradient(135deg, var(--p-e1), var(--p-e2)); }
-  .p-chip { font-weight: 500; font-size: 11px; padding: 1px 8px; border-radius: 9px; background: var(--p-chip); color: var(--p-sub); }
-  .p-btns { margin-left: auto; display: flex; gap: 4px; color: var(--p-sub); }
-  .p-btns span { width: 24px; height: 22px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; }
-  .ruby { display: flex; flex-wrap: wrap; padding: 6px 12px 10px; }
-  .ruby .c { display: flex; flex-direction: column; align-items: center; padding: 2px 3px; }
-  .ruby .py { font-size: 12.5px; line-height: 1.2; min-height: 15px; }
-  .ruby .h { font: 500 26px/1.35 var(--hanzi); color: var(--p-hanzi); }
-  .ruby .punct .h { font-size: 20px; color: var(--p-sub); align-self: flex-end; }
-  .t1 { color: var(--p-t1); } .t2 { color: var(--p-t2); } .t3 { color: var(--p-t3); } .t4 { color: var(--p-t4); } .t5 { color: var(--p-t5); }
-  .p-foot { padding: 7px 14px 9px; font-size: 12.5px; color: var(--p-sub); background: var(--p-foot); border-top: 1px solid var(--p-div); }
-  .p-deco { position: absolute; right: 12px; bottom: 38px; font-size: 26px; opacity: .45; pointer-events: none; }
-  @media (max-width: 520px) { .demo { height: 460px; } .chat { right: 0; } .ctx { left: 90px; } }
+  .th-dark { --p-bg:#1C2029; --p-border:rgba(255,255,255,.14); --p-fg:#EEF0F3; --p-sub:#A0A8B5; --p-chip:rgba(255,255,255,.12); --p-foot:rgba(255,255,255,.05); --p-div:rgba(255,255,255,.09); --p-hanzi:#F5F7FA; --p-py:#9EC5FF; --p-t1:#FF6B6B; --p-t2:#FFB454; --p-t3:#5FD38D; --p-t4:#5AA9FF; --p-t5:#98A2AF; --p-e1:#FF6B6B; --p-e2:#D93A40; }
+  .th-light { --p-bg:#FFFFFF; --p-border:#DDE1E6; --p-fg:#1B1F27; --p-sub:#5B6573; --p-chip:#F0F2F5; --p-foot:#F7F8FA; --p-div:#EEF0F3; --p-hanzi:#1B1F27; --p-py:#2F6FEB; --p-t1:#E5484D; --p-t2:#D97A00; --p-t3:#1E9E5A; --p-t4:#2F6FEB; --p-t5:#8A94A3; --p-e1:#FF6B6B; --p-e2:#D93A40; }
+  .th-strawberry { --p-bg:linear-gradient(135deg,#FFF6F8,#FFE1EA); --p-border:#FFC9D8; --p-fg:#6B2C3E; --p-sub:#A0667A; --p-chip:#FFE3EC; --p-foot:rgba(255,255,255,.5); --p-div:#FFD3E0; --p-hanzi:#4A1F2C; --p-py:#E0457B; --p-t1:#E8365D; --p-t2:#E27A12; --p-t3:#2E9A62; --p-t4:#3C6FE0; --p-t5:#B08A98; --p-e1:#FF8FB1; --p-e2:#FF4F7E; }
+  .th-tabby { --p-bg:linear-gradient(135deg,#FFFBF2,#FFEBCB); --p-border:#F6D7A6; --p-fg:#5A3A17; --p-sub:#9A7447; --p-chip:#FDE7C4; --p-foot:rgba(255,255,255,.5); --p-div:#F6DDB5; --p-hanzi:#4A2F12; --p-py:#D46F0E; --p-t1:#E0453A; --p-t2:#D97A00; --p-t3:#2F9A56; --p-t4:#2F6FEB; --p-t5:#A68B6A; --p-e1:#FFB25B; --p-e2:#F08A24; }
+  .th-matcha { --p-bg:linear-gradient(135deg,#F6FBF0,#E1F0D2); --p-border:#CDE3B8; --p-fg:#2F4A22; --p-sub:#6A8757; --p-chip:#E3F1D6; --p-foot:rgba(255,255,255,.5); --p-div:#D6E8C5; --p-hanzi:#233A18; --p-py:#3F8A34; --p-t1:#D9463E; --p-t2:#C97A10; --p-t3:#23904F; --p-t4:#2E6BD6; --p-t5:#8C9C80; --p-e1:#8CC77A; --p-e2:#4E9442; }
+  .th-sakura { --p-bg:linear-gradient(135deg,#FFFFFF,#FCE6EF); --p-border:#F7D2E0; --p-fg:#5C3446; --p-sub:#9C7385; --p-chip:#FBE3EC; --p-foot:rgba(255,255,255,.5); --p-div:#F6DCE6; --p-hanzi:#43222F; --p-py:#D0578A; --p-t1:#E23D5E; --p-t2:#DB7A10; --p-t3:#2C955C; --p-t4:#3A6BE0; --p-t5:#B294A2; --p-e1:#F8A5C2; --p-e2:#E86A9A; }
+  .th-ocean { --p-bg:linear-gradient(135deg,#F2FAFF,#D5ECFF); --p-border:#BFDDF7; --p-fg:#173A5C; --p-sub:#5C7E9E; --p-chip:#DCEEFF; --p-foot:rgba(255,255,255,.5); --p-div:#CDE4F7; --p-hanzi:#10304F; --p-py:#1F7BD0; --p-t1:#E0454F; --p-t2:#D27A0E; --p-t3:#1E9460; --p-t4:#2C5FD8; --p-t5:#8499AD; --p-e1:#6EC1FF; --p-e2:#2F8FE0; }
+  .th-galaxy { --p-bg:linear-gradient(135deg,#221A4A,#3A2470); --p-border:rgba(182,156,255,.35); --p-fg:#F2EEFF; --p-sub:#B7AEDB; --p-chip:rgba(255,255,255,.16); --p-foot:rgba(255,255,255,.07); --p-div:rgba(255,255,255,.12); --p-hanzi:#FFFFFF; --p-py:#C9B8FF; --p-t1:#FF7A93; --p-t2:#FFC46B; --p-t3:#6FE3A5; --p-t4:#7DB8FF; --p-t5:#A59DC6; --p-e1:#C9B8FF; --p-e2:#8A6CF0; }
 
-  /* Popup themes (same palettes as the app) */
-  .th-dark { --p-bg:#1C2029; --p-border:rgba(255,255,255,.2); --p-fg:#F3F4F6; --p-sub:#A0A8B5; --p-chip:rgba(255,255,255,.15); --p-foot:rgba(255,255,255,.06); --p-div:rgba(255,255,255,.1); --p-hanzi:#F5F7FA; --p-t1:#FF6B6B; --p-t2:#FFB454; --p-t3:#5FD38D; --p-t4:#5AA9FF; --p-t5:#98A2AF; --p-e1:#FF6B6B; --p-e2:#D93A40; --p-radius:12px; }
-  .th-light { --p-bg:#FFFFFF; --p-border:#DDE1E6; --p-fg:#1B1F27; --p-sub:#5B6573; --p-chip:#F0F2F5; --p-foot:#F7F8FA; --p-div:#EEF0F3; --p-hanzi:#1B1F27; --p-t1:#E5484D; --p-t2:#D97A00; --p-t3:#1E9E5A; --p-t4:#2F6FEB; --p-t5:#8A94A3; --p-e1:#FF6B6B; --p-e2:#D93A40; --p-radius:12px; }
-  .th-strawberry { --p-bg:linear-gradient(135deg,#FFF6F8,#FFE1EA); --p-border:#FFC9D8; --p-fg:#6B2C3E; --p-sub:#A0667A; --p-chip:#FFE3EC; --p-foot:rgba(255,255,255,.5); --p-div:#FFD3E0; --p-hanzi:#4A1F2C; --p-t1:#E8365D; --p-t2:#E27A12; --p-t3:#2E9A62; --p-t4:#3C6FE0; --p-t5:#B08A98; --p-e1:#FF8FB1; --p-e2:#FF4F7E; --p-radius:16px; }
-  .th-tabby { --p-bg:linear-gradient(135deg,#FFFBF2,#FFEBCB); --p-border:#F6D7A6; --p-fg:#5A3A17; --p-sub:#9A7447; --p-chip:#FDE7C4; --p-foot:rgba(255,255,255,.5); --p-div:#F6DDB5; --p-hanzi:#4A2F12; --p-t1:#E0453A; --p-t2:#D97A00; --p-t3:#2F9A56; --p-t4:#2F6FEB; --p-t5:#A68B6A; --p-e1:#FFB25B; --p-e2:#F08A24; --p-radius:16px; }
-  .th-matcha { --p-bg:linear-gradient(135deg,#F6FBF0,#E1F0D2); --p-border:#CDE3B8; --p-fg:#2F4A22; --p-sub:#6A8757; --p-chip:#E3F1D6; --p-foot:rgba(255,255,255,.5); --p-div:#D6E8C5; --p-hanzi:#233A18; --p-t1:#D9463E; --p-t2:#C97A10; --p-t3:#23904F; --p-t4:#2E6BD6; --p-t5:#8C9C80; --p-e1:#8CC77A; --p-e2:#4E9442; --p-radius:14px; }
-  .th-sakura { --p-bg:linear-gradient(135deg,#FFFFFF,#FCE6EF); --p-border:#F7D2E0; --p-fg:#5C3446; --p-sub:#9C7385; --p-chip:#FBE3EC; --p-foot:rgba(255,255,255,.5); --p-div:#F6DCE6; --p-hanzi:#43222F; --p-t1:#E23D5E; --p-t2:#DB7A10; --p-t3:#2C955C; --p-t4:#3A6BE0; --p-t5:#B294A2; --p-e1:#F8A5C2; --p-e2:#E86A9A; --p-radius:16px; }
-  .th-ocean { --p-bg:linear-gradient(135deg,#F2FAFF,#D5ECFF); --p-border:#BFDDF7; --p-fg:#173A5C; --p-sub:#5C7E9E; --p-chip:#DCEEFF; --p-foot:rgba(255,255,255,.5); --p-div:#CDE4F7; --p-hanzi:#10304F; --p-t1:#E0454F; --p-t2:#D27A0E; --p-t3:#1E9460; --p-t4:#2C5FD8; --p-t5:#8499AD; --p-e1:#6EC1FF; --p-e2:#2F8FE0; --p-radius:14px; }
-  .th-galaxy { --p-bg:linear-gradient(135deg,#221A4A,#3A2470); --p-border:rgba(182,156,255,.35); --p-fg:#F2EEFF; --p-sub:#B7AEDB; --p-chip:rgba(255,255,255,.18); --p-foot:rgba(255,255,255,.08); --p-div:rgba(255,255,255,.14); --p-hanzi:#FFFFFF; --p-t1:#FF7A93; --p-t2:#FFC46B; --p-t3:#6FE3A5; --p-t4:#7DB8FF; --p-t5:#A59DC6; --p-e1:#C9B8FF; --p-e2:#8A6CF0; --p-radius:14px; }
+  /* ---------- Mẫu chữ lớn trên ô 田字格 ---------- */
+  .specimen { border-block: 1px solid var(--rule); background: var(--card); padding-block: 44px 40px; }
+  .specimen .head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px 24px; margin-bottom: 26px; }
+  .specimen h2 { font-size: 22px; letter-spacing: -.01em; font-weight: 600; }
+  .specimen .head p { color: var(--muted); font-size: 14px; }
+  .tones { display: flex; flex-wrap: wrap; gap: 6px 16px; font: 400 13px var(--mono); color: var(--ink-2); }
+  .tones span { display: inline-flex; align-items: center; gap: 6px; }
+  .tones i { width: 10px; height: 10px; border-radius: 2px; }
+  .sheet { overflow-x: auto; padding-bottom: 6px; }
+  .cells { display: flex; width: max-content; }
+  .cell { width: 76px; display: flex; flex-direction: column; align-items: center; cursor: default; }
+  .cell .py { font: 500 15px/1 var(--ui); height: 26px; display: flex; align-items: center; }
+  .cell .box { width: 76px; height: 76px; position: relative; border: 1px solid var(--grid); margin-left: -1px;
+               background:
+                 linear-gradient(var(--grid), var(--grid)) center / 100% 1px no-repeat,
+                 linear-gradient(var(--grid), var(--grid)) center / 1px 100% no-repeat;
+               display: grid; place-items: center; font: 500 46px/1 var(--song); transition: background-color .15s; }
+  .cell.pu .box { font-size: 30px; color: var(--muted); }
+  .cell.on .box { background-color: var(--seal-soft); }
+  .gloss { margin-top: 22px; min-height: 58px; display: grid; grid-template-columns: auto 1fr; gap: 4px 18px; align-items: baseline; }
+  .gloss .w { font: 500 26px/1.2 var(--hei); grid-row: span 2; }
+  .gloss .r { font: 500 14px var(--ui); color: var(--seal); }
+  .gloss .r small { font: 400 12px var(--mono); color: var(--muted); margin-left: 10px; letter-spacing: .04em; }
+  .gloss .m { color: var(--ink-2); font-size: 15px; }
+  .hint { margin-top: 14px; font-size: 13px; color: var(--muted); }
 
-  /* ---------- Sections ---------- */
-  section { padding: 84px 0; }
-  section.alt { background: var(--bg-alt); }
-  .sec-head { text-align: center; max-width: 680px; margin: 0 auto 44px; }
-  .sec-head .kicker { color: var(--accent); font-weight: 700; font-size: 13.5px; letter-spacing: .08em; text-transform: uppercase; }
-  h2 { font-size: clamp(28px, 3.6vw, 38px); line-height: 1.2; margin: 8px 0 12px; letter-spacing: -.01em; }
-  .sec-head p { color: var(--sub); margin: 0; font-size: 17px; }
+  /* ---------- Khối chung ---------- */
+  section.block { padding-block: 72px; }
+  section.block + section.block { border-top: 1px solid var(--rule); }
+  .block-head { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; margin-bottom: 36px; }
+  .block-head h2 { font-size: clamp(24px, 3vw, 32px); letter-spacing: -.02em; line-height: 1.2; font-weight: 700; }
+  .block-head p { color: var(--ink-2); font-size: 16.5px; max-width: 36em; margin-top: 10px; }
+  @media (max-width: 820px) { .block-head { grid-template-columns: minmax(0, 1fr); gap: 10px; } }
 
-  .grid { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
-  @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; transition: transform .2s, box-shadow .2s; }
-  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-  .ico { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: var(--accent-soft); margin-bottom: 14px; }
-  .card h3 { margin: 0 0 6px; font-size: 18px; }
-  .card p { margin: 0; color: var(--sub); font-size: 15px; }
+  /* Ba cách dùng */
+  .ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--ink); }
+  .way { padding: 20px 24px 0 0; }
+  .way + .way { padding-left: 24px; border-left: 1px solid var(--rule); }
+  .way .keys { font: 500 13px var(--mono); color: var(--seal); margin-bottom: 10px; min-height: 22px; }
+  .way h3 { font-size: 18px; margin-bottom: 8px; letter-spacing: -.01em; }
+  .way p { color: var(--ink-2); font-size: 15px; }
+  @media (max-width: 820px) { .ways { grid-template-columns: minmax(0, 1fr); } .way, .way + .way { padding: 18px 0; border-left: 0; border-bottom: 1px solid var(--rule); } }
 
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; counter-reset: s; }
-  @media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
-  .step { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; position: relative; }
-  .step::before { counter-increment: s; content: counter(s); width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
-                  font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--accent-2), var(--accent)); margin-bottom: 14px; }
-  .step h3 { margin: 0 0 6px; font-size: 18px; }
-  .step p { margin: 0; color: var(--sub); font-size: 15px; }
-  kbd { font: 600 13px var(--ui); padding: 2px 8px; border-radius: 6px; border: 1px solid var(--line); border-bottom-width: 2px; background: var(--bg-alt); }
+  /* Thông số */
+  .specs { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; }
+  @media (max-width: 820px) { .specs { grid-template-columns: minmax(0, 1fr); gap: 0; } .specs > .spacer { display: none; } }
+  dl { margin: 0; border-top: 1px solid var(--rule); }
+  dl > div { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 20px; padding-block: 16px; border-bottom: 1px solid var(--rule); }
+  dt { font-weight: 600; font-size: 15px; }
+  dd { margin: 0; color: var(--ink-2); font-size: 15px; }
+  dd .hz { color: var(--ink); }
+  @media (max-width: 600px) { dl > div { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
 
-  /* Theme picker */
-  .themes { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; }
-  @media (max-width: 900px) { .themes { grid-template-columns: 1fr; } }
-  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-  .chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line);
-          background: var(--card); cursor: pointer; font: 600 14px var(--ui); color: var(--text); transition: .15s; }
-  .chip i { width: 16px; height: 16px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.1); }
-  .chip.on { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-  .theme-stage { position: relative; min-height: 230px; display: grid; place-items: center; padding: 20px; border-radius: 22px;
-                 background: repeating-linear-gradient(45deg, var(--bg-alt) 0 12px, var(--bg) 12px 24px); border: 1px solid var(--line); }
-  .theme-stage .popup { position: relative; opacity: 1; animation: none; right: auto; bottom: auto; }
-  .ears { position: absolute; top: -13px; left: 26px; display: none; gap: 22px; }
-  .ears b { width: 0; height: 0; border-left: 11px solid transparent; border-right: 11px solid transparent; border-bottom: 16px solid #F6D7A6; }
-  .th-tabby .ears { display: flex; }
+  /* Giao diện popup */
+  .themes { display: grid; grid-template-columns: 240px minmax(0, 1fr) minmax(0, 420px); gap: 32px; align-items: start; }
+  @media (max-width: 980px) { .themes { grid-template-columns: minmax(0, 1fr); } .themes > .spacer { display: none; } }
+  .swatches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
+  .sw { display: flex; align-items: center; gap: 12px; padding: 12px 4px; border: 0; border-bottom: 1px solid var(--rule); background: none; color: var(--ink-2);
+        font: 500 14.5px var(--ui); text-align: left; cursor: pointer; }
+  .sw i { width: 22px; height: 22px; border-radius: 5px; border: 1px solid rgba(0,0,0,.12); flex: none; }
+  .sw:hover { color: var(--ink); }
+  .sw.on { color: var(--ink); box-shadow: inset 3px 0 0 var(--seal); padding-left: 12px; }
+  .stage { position: relative; }
+  .stage .popup { position: relative; animation: none; width: 100%; }
 
-  /* Download */
-  .dl { text-align: center; background: linear-gradient(135deg, #2A1A1F, #1B1F27); color: #fff; border-radius: 26px; padding: 56px 24px; position: relative; overflow: hidden; }
-  .dl::after { content: "拼"; position: absolute; right: -20px; bottom: -70px; font: 700 260px var(--hanzi); color: rgba(255,255,255,.04); }
-  .dl h2 { color: #fff; }
-  .dl p { color: #C9CED8; max-width: 560px; margin: 0 auto 26px; }
-  .dl .cta { justify-content: center; }
-  .dl .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.25); }
-  .dl .note { margin-top: 22px; font-size: 13.5px; color: #9AA3B2; }
-  .dl .ver { font-size: 13px; color: #FFB3B5; margin-bottom: 8px; min-height: 1.4em; }
-  .platforms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
-  @media (max-width: 680px) { .platforms { grid-template-columns: 1fr; } }
-  .plat { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 24px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-  .plat.suggest { border-color: rgba(255,107,107,.7); box-shadow: 0 0 0 3px rgba(229,72,77,.18); }
-  .plat-name { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; }
-  .plat-name svg { width: 24px; height: 24px; }
-  .plat-req { font-size: 13.5px; color: #C9CED8; }
-  .plat .btn { width: 100%; justify-content: center; margin-top: 6px; }
-  .plat-alt { font-size: 13.5px; color: #FFB3B5; }
-  .plat .note { margin-top: 6px; font-size: 12.5px; }
+  /* Tải về */
+  .dl-table { border-top: 2px solid var(--ink); }
+  .row { display: grid; grid-template-columns: 200px minmax(0, 1fr) auto; gap: 24px; align-items: center; padding-block: 22px; border-bottom: 1px solid var(--rule); }
+  .row.suggest .os::after { content: attr(data-suggest); margin-left: 10px; font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--seal); }
+  .os { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; }
+  .os svg { width: 20px; height: 20px; }
+  .row .req { color: var(--ink-2); font-size: 14.5px; }
+  .row .req small { display: block; color: var(--muted); font-size: 13px; margin-top: 3px; }
+  .row .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; justify-content: flex-end; }
+  .row .acts a.minor { font-size: 14px; color: var(--ink-2); }
+  @media (max-width: 820px) { .row { grid-template-columns: minmax(0, 1fr); gap: 10px; } .row .acts { justify-content: flex-start; } }
+  .ver { font: 400 13px var(--mono); color: var(--muted); margin-top: 16px; min-height: 1.4em; }
 
-  /* FAQ */
-  .faq { max-width: 780px; margin: 0 auto; }
-  details { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; margin-bottom: 10px; }
-  summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
-  summary::after { content: "+"; color: var(--accent); font-size: 20px; line-height: 1; }
-  details[open] summary::after { content: "–"; }
-  details p { color: var(--sub); margin: 10px 0 0; }
+  /* Hỏi đáp */
+  .faq { border-top: 1px solid var(--rule); }
+  details { border-bottom: 1px solid var(--rule); }
+  summary { cursor: pointer; list-style: none; padding: 18px 0; font-weight: 600; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font: 400 20px/1 var(--mono); color: var(--muted); }
+  details[open] summary::after { content: "−"; }
+  details p { color: var(--ink-2); padding-bottom: 18px; max-width: 44em; }
 
-  footer { padding: 36px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
-  footer .wrap { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
-  footer a { color: var(--sub); }
-
-  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; }
-  .reveal.in { opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; transform: none; }
-    .popup, .ctx, .cursor, .msg.target { animation: none !important; }
-    .demo .popup { opacity: 1; } .cursor, .ctx { display: none; }
-  }
+  footer { border-top: 1px solid var(--rule); padding-block: 32px 44px; color: var(--muted); font-size: 13.5px; }
+  footer .wrap { display: grid; gap: 10px; }
+  footer .line { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; }
+  footer a { color: var(--ink-2); }
 </style>
 </head>
 <body>
 
-<nav>
+<header class="top">
   <div class="wrap">
-    <a class="brand" href="#top"><span class="logo">拼</span>GenPiYi</a>
-    <div class="links">
-      <a href="#features" data-i="nav.features">Tính năng</a>
+    <a class="brand" href="#top"><span class="seal">拼</span>GenPiYi</a>
+    <nav class="links">
       <a href="#how" data-i="nav.how">Cách dùng</a>
-      <a href="#themes" data-i="nav.themes">Giao diện</a>
+      <a href="#details" data-i="nav.details">Chi tiết</a>
+      <a href="#download" data-i="nav.download">Tải về</a>
       <a href="#faq" data-i="nav.faq">Hỏi đáp</a>
       <a href="https://github.com/dung-nguyentrung/genpiyi" target="_blank" rel="noopener">GitHub</a>
-    </div>
+    </nav>
     <div class="lang" role="group" aria-label="Language">
       <button data-lang="vi">VI</button><button data-lang="en">EN</button>
     </div>
   </div>
-</nav>
+</header>
 
-<!-- ================= HERO ================= -->
-<header class="hero" id="top">
+<main id="top">
+<!-- ================= Mở đầu ================= -->
+<section class="hero">
   <div class="wrap">
     <div>
-      <span class="pill" data-i="hero.pill">✨ Miễn phí · Mã nguồn mở · Windows &amp; macOS</span>
-      <h1 data-i-html="hero.title">Đọc được mọi tin nhắn <span class="grad">tiếng Trung</span> — chỉ cần copy</h1>
-      <p class="lead" data-i="hero.lead">Chuột phải vào tin nhắn trong Zalo, WeChat, LINE… chọn Sao chép, pinyin hiện ngay cạnh con trỏ chuột — có dấu thanh, tô màu, đọc đúng chữ đa âm.</p>
+      <h1 data-i-html="hero.title">Sao chép một tin nhắn tiếng Trung, đọc được <em>pinyin</em> và nghĩa ngay cạnh con trỏ.</h1>
+      <p class="lead" data-i="hero.lead">GenPiYi chạy nền trên máy. Khi bạn chuột phải vào tin nhắn trong Zalo, WeChat hay LINE và chọn Sao chép, một khung nhỏ hiện ra với pinyin trên từng chữ, tô màu theo thanh điệu và nghĩa của từng từ.</p>
       <div class="cta">
-        <a class="btn btn-primary dl-win" id="heroWin" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.5 4.5v7H3zM11.5 4.3 21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg>
-          <span><span data-i="cta.download">Tải cho Windows</span><small class="dl-size" data-i="cta.free">Miễn phí · không cần quyền admin</small></span>
+        <a class="btn btn-main dl-win" id="heroWin" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.5v7H3zM11.5 4.3 21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg>
+          <span><span data-i="cta.win">Tải cho Windows</span><small class="dl-size">Windows 10 / 11</small></span>
         </a>
-        <a class="btn btn-ghost dl-mac" id="heroMac" href="https://github.com/dung-nguyentrung/genpiyi/releases">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg>
-          <span><span data-i="cta.mac">Tải cho macOS</span><small class="dl-mac-size" data-i="cta.macSub">macOS 13+ · chip Apple &amp; Intel</small></span>
+        <a class="btn btn-alt dl-mac" id="heroMac" href="https://github.com/dung-nguyentrung/genpiyi/releases">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg>
+          <span><span data-i="cta.mac">Tải cho macOS</span><small>macOS 13+</small></span>
         </a>
       </div>
-      <div class="meta">
-        <span data-i="meta.1">Chạy offline</span><span data-i="meta.2">Không quảng cáo</span><span data-i="meta.3">Windows 10 / 11</span><span data-i="meta.4">macOS 13+</span>
+      <div class="facts">
+        <span data-i="facts.1">Miễn phí · MIT</span><span data-i="facts.2">Không cần mạng</span><span data-i="facts.3">Không thu thập dữ liệu</span>
       </div>
     </div>
 
-    <!-- Demo -->
-    <div class="demo" aria-hidden="true">
+    <div class="shot" aria-hidden="true">
       <div class="chat">
-        <div class="chat-top"><i></i><i></i><i></i><span class="who">王经理 · WeChat</span></div>
+        <div class="chat-bar"><i></i><i></i><i></i><span>王经理 · WeChat</span></div>
         <div class="chat-body">
           <div class="msg in hz">您好！合同我已经发给您了。</div>
-          <div class="msg out" data-i="demo.reply">Dạ em nhận rồi ạ 👍</div>
-          <div class="msg in hz target">你好！今天晚上我们去哪里吃饭？</div>
+          <div class="msg out" data-i="demo.reply">Dạ em nhận rồi ạ</div>
+          <div class="msg in hz sel">你好！今天晚上我们去哪里吃饭？</div>
         </div>
       </div>
-      <div class="ctx">
-        <div data-i="demo.reply2">Trả lời</div>
-        <div class="copy" data-i="demo.copy">Sao chép</div>
-        <div data-i="demo.forward">Chuyển tiếp</div>
-        <div data-i="demo.delete">Xoá</div>
-      </div>
-      <svg class="cursor" viewBox="0 0 24 24"><path d="M4 2l15 10-7 1.5L9 21z" fill="#fff" stroke="#111" stroke-width="1.5" stroke-linejoin="round"/></svg>
       <div class="popup th-dark" id="heroPopup"></div>
     </div>
   </div>
-</header>
+</section>
 
-<!-- ================= FEATURES ================= -->
-<section id="features" class="alt">
+<!-- ================= Mẫu chữ ================= -->
+<section class="specimen" aria-labelledby="spec-title">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" data-i="f.kicker">Tính năng</div>
-      <h2 data-i="f.title">Gọn nhẹ, đúng việc, không làm phiền</h2>
-      <p data-i="f.sub">GenPiYi nằm yên ở khay hệ thống (Windows) hoặc thanh menu (macOS) và chỉ xuất hiện khi bạn cần.</p>
+    <div class="head">
+      <h2 id="spec-title" data-i="spec.title">Mỗi chữ một ô, pinyin ở trên, màu theo thanh điệu</h2>
+      <div class="tones" id="toneKey"></div>
     </div>
-    <div class="grid">
-      <div class="card reveal"><div class="ico">📋</div><h3 data-i="f1.t">Copy là thấy pinyin</h3><p data-i="f1.d">Chuột phải → Sao chép trong app chat, popup hiện ngay cạnh con trỏ. Không cần mở thêm cửa sổ nào.</p></div>
-      <div class="card reveal"><div class="ico">💬</div><h3 data-i="f2.t">Hỗ trợ nhiều app chat</h3><p data-i="f2.d">Zalo, WeChat, WeCom, LINE, Telegram, QQ, DingTalk, Feishu, WhatsApp, Messenger, Discord… tự quét và bật/tắt từng app.</p></div>
-      <div class="card reveal"><div class="ico">⌨️</div><h3 data-i="f3.t">Phím tắt ở mọi nơi</h3><p data-i-html="f3.d">Bôi đen chữ trong trình duyệt, Word, PDF… rồi bấm <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>P</kbd> (trên Mac: <kbd>⌃</kbd>+<kbd>⌥</kbd>+<kbd>P</kbd>).</p></div>
-      <div class="card reveal"><div class="ico">🎯</div><h3 data-i="f4.t">Đọc đúng chữ đa âm</h3><p data-i-html="f4.d">Hiểu theo ngữ cảnh: <span class="hz">银行</span> yínháng, <span class="hz">行走</span> xíngzǒu. Rê chuột để xem các cách đọc khác.</p></div>
-      <div class="card reveal"><div class="ico">🎨</div><h3 data-i="f5.t">Tô màu theo thanh điệu</h3><p data-i="f5.d">Mỗi thanh một màu, dễ nhớ khi học. Chọn dấu thanh (nǐ hǎo) hoặc số (ni3 hao3).</p></div>
-      <div class="card reveal"><div class="ico">🔒</div><h3 data-i="f6.t">Riêng tư, chạy offline</h3><p data-i="f6.d">Không cần tài khoản, không gửi dữ liệu đi đâu. Mã nguồn mở hoàn toàn trên GitHub.</p></div>
-    </div>
+    <div class="sheet"><div class="cells" id="cells"></div></div>
+    <div class="gloss" id="gloss" aria-live="polite"></div>
+    <p class="hint" data-i="spec.hint">Rê chuột hoặc chạm vào một chữ để xem nghĩa của cả từ, giống như trong app.</p>
   </div>
 </section>
 
-<!-- ================= HOW ================= -->
-<section id="how">
+<!-- ================= Cách dùng ================= -->
+<section class="block" id="how">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker" data-i="h.kicker">Cách dùng</div>
-      <h2 data-i="h.title">3 bước, chưa tới 1 phút</h2>
+    <div class="block-head">
+      <div class="label" data-i="how.label">Cách dùng</div>
+      <div>
+        <h2 data-i="how.title">Không phải mở thêm cửa sổ nào</h2>
+        <p data-i="how.sub">Bạn vẫn nhắn tin như bình thường. GenPiYi chỉ hiện ra khi bạn sao chép chữ Hán hoặc bấm phím tắt.</p>
+      </div>
     </div>
-    <div class="steps">
-      <div class="step reveal"><h3 data-i="s1.t">Tải và cài đặt</h3><p data-i="s1.d">Windows: tải GenPiYi-Setup.exe, mở ra và bấm Install. macOS: tải file .dmg, kéo GenPiYi vào Applications. Không cần cài thêm gì.</p></div>
-      <div class="step reveal"><h3 data-i="s2.t">Chuột phải → Sao chép</h3><p data-i="s2.d">Trong Zalo, WeChat, LINE… chuột phải vào tin nhắn tiếng Trung và chọn Sao chép / Copy / 复制 (trên Mac có thể bôi đen rồi ⌘C).</p></div>
-      <div class="step reveal"><h3 data-i="s3.t">Đọc pinyin</h3><p data-i="s3.d">Popup hiện ngay cạnh chuột. Bấm copy pinyin, ghim popup, hoặc click ra ngoài để đóng — vẫn gõ chat bình thường.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= THEMES ================= -->
-<section id="themes" class="alt">
-  <div class="wrap themes">
-    <div class="reveal">
-      <div class="kicker" style="color:var(--accent);font-weight:700;font-size:13.5px;letter-spacing:.08em;text-transform:uppercase" data-i="t.kicker">Giao diện</div>
-      <h2 data-i="t.title">8 mẫu popup, chọn cái bạn thích</h2>
-      <p style="color:var(--sub);margin:0 0 22px" data-i="t.sub">Từ tối giản đến dễ thương. Bấm thử để xem trước:</p>
-      <div class="chips" id="chips"></div>
-    </div>
-    <div class="theme-stage reveal">
-      <div class="popup th-strawberry" id="themePopup" style="width:min(400px,100%)"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= DOWNLOAD ================= -->
-<section id="download">
-  <div class="wrap">
-    <div class="dl reveal">
-      <div class="ver" id="ver"></div>
-      <h2 data-i="d.title">Sẵn sàng thử chưa?</h2>
-      <p data-i="d.sub">Miễn phí mãi mãi. Tải về, cài đặt, rồi copy một tin nhắn tiếng Trung bất kỳ.</p>
-      <div class="platforms">
-        <div class="plat">
-          <div class="plat-name"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.5 4.5v7H3zM11.5 4.3 21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg><span>Windows</span></div>
-          <div class="plat-req" data-i="d.winReq">Windows 10 / 11 · x64 &amp; ARM64</div>
-          <a class="btn btn-primary dl-win" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest"><span data-i="cta.download2">Tải bộ cài đặt (.exe)</span></a>
-          <a class="plat-alt" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest" data-i="cta.other">Bản chạy ngay / ARM64</a>
-          <div class="note" data-i-html="d.note">Hiện “Windows protected your PC”? Bấm <b>More info → Run anyway</b>. App chưa mua chữ ký số, không phải virus.</div>
-        </div>
-        <div class="plat">
-          <div class="plat-name"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span>macOS</span></div>
-          <div class="plat-req" data-i="d.macReq">macOS 13 Ventura trở lên · chip Apple &amp; Intel</div>
-          <a class="btn btn-primary dl-mac" href="https://github.com/dung-nguyentrung/genpiyi/releases"><span data-i="cta.dmg">Tải cho Mac (.dmg)</span></a>
-          <a class="plat-alt dl-mac-zip" href="https://github.com/dung-nguyentrung/genpiyi/releases" data-i="cta.zip">Bản nén .zip</a>
-          <div class="note" data-i-html="d.macNote">Mac báo không mở được? Vào <b>Cài đặt hệ thống → Quyền riêng tư &amp; Bảo mật → Vẫn mở</b>. App chưa được Apple công chứng, không phải virus.</div>
-        </div>
+    <div class="ways">
+      <div class="way">
+        <div class="keys" data-i="w1.k">Chuột phải → Sao chép</div>
+        <h3 data-i="w1.t">Trong app chat</h3>
+        <p data-i="w1.d">Zalo, WeChat, LINE, Telegram, QQ… Chuột phải vào tin nhắn, chọn Sao chép / Copy / 复制. Khung pinyin hiện ngay cạnh con trỏ.</p>
+      </div>
+      <div class="way">
+        <div class="keys"><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>P</kbd> · <kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>P</kbd></div>
+        <h3 data-i="w2.t">Ở bất kỳ đâu</h3>
+        <p data-i="w2.d">Bôi đen chữ trong trình duyệt, Word, file PDF rồi bấm phím tắt. Không bôi đen gì thì app đọc nội dung đang có trong clipboard.</p>
+      </div>
+      <div class="way">
+        <div class="keys" data-i="w3.k">Esc để đóng</div>
+        <h3 data-i="w3.t">Trong khung pinyin</h3>
+        <p data-i="w3.d">Xem nghĩa từng từ, sao chép pinyin, ghim khung lại. Khung không chiếm con trỏ gõ phím nên bạn vẫn gõ trả lời được.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= FAQ ================= -->
-<section id="faq" class="alt">
+<!-- ================= Chi tiết ================= -->
+<section class="block" id="details">
   <div class="wrap">
-    <div class="sec-head reveal"><div class="kicker" data-i="q.kicker">Hỏi đáp</div><h2 data-i="q.title">Câu hỏi thường gặp</h2></div>
-    <div class="faq">
-      <details class="reveal"><summary data-i="q1.q">GenPiYi có miễn phí không?</summary><p data-i="q1.a">Có, miễn phí hoàn toàn và là mã nguồn mở (giấy phép MIT). Không quảng cáo, không bản trả phí.</p></details>
-      <details class="reveal"><summary data-i="q2.q">Vì sao Windows cảnh báo khi mở file cài?</summary><p data-i="q2.a">Windows SmartScreen cảnh báo mọi phần mềm chưa có chữ ký số trả phí. Bấm “More info” → “Run anyway” để tiếp tục. Toàn bộ mã nguồn công khai trên GitHub để bạn kiểm tra.</p></details>
-      <details class="reveal"><summary data-i="q3.q">App có đọc trộm tin nhắn của tôi không?</summary><p data-i="q3.a">Không. GenPiYi chỉ đọc đoạn chữ bạn vừa sao chép để hiện pinyin, xử lý ngay trên máy và không lưu, không gửi đi đâu. App không kết nối Internet.</p></details>
-      <details class="reveal"><summary data-i="q4.q">App chat của tôi không có trong danh sách?</summary><p data-i="q4.a">Mở app chat đó, vào Cài đặt của GenPiYi → “Thêm app khác đang mở” và bấm Thêm. Hoặc dùng phím tắt Ctrl+Alt+P (Mac: ⌃⌥P) — chạy được ở mọi ứng dụng.</p></details>
-      <details class="reveal"><summary data-i="q7.q">Mac báo “không thể mở GenPiYi” lần đầu?</summary><p data-i-html="q7.a">App chưa được Apple công chứng (notarize) nên macOS chặn lần đầu. Vào <b>Cài đặt hệ thống → Quyền riêng tư &amp; Bảo mật</b>, kéo xuống và bấm <b>Vẫn mở</b>. Để phím tắt tự copy đoạn đang bôi đen, cho phép GenPiYi ở mục <b>Trợ năng</b> (Accessibility) trong cùng trang đó.</p></details>
-      <details class="reveal"><summary data-i="q5.q">Có bản cho macOS hoặc điện thoại không?</summary><p data-i="q5.a">Đã có bản macOS (macOS 13 trở lên, chip Apple và Intel) — nằm trên thanh menu, dùng y như bản Windows. Bản điện thoại chưa có; nếu bạn muốn đóng góp, hãy ghé GitHub!</p></details>
-      <details class="reveal"><summary data-i="q6.q">Gỡ cài đặt thế nào?</summary><p data-i="q6.a">Windows: Settings → Apps → Installed apps, tìm GenPiYi và bấm Uninstall. macOS: bấm biểu tượng 拼 trên thanh menu → Thoát, rồi kéo GenPiYi từ Applications vào Thùng rác.</p></details>
+    <div class="block-head">
+      <div class="label" data-i="det.label">Chi tiết</div>
+      <div><h2 data-i="det.title">Những gì app làm được</h2></div>
+    </div>
+    <div class="specs">
+      <div class="spacer"></div>
+      <dl>
+        <div><dt data-i="d1.t">Chữ đa âm</dt><dd data-i-html="d1.d">Đọc theo cả cụm từ: <span class="hz">银行</span> yínháng, <span class="hz">行走</span> xíngzǒu. Chữ có nhiều cách đọc được gạch chấm, rê chuột để xem.</dd></div>
+        <div><dt data-i="d2.t">Nghĩa từ vựng</dt><dd data-i="d2.d">Tiếng Việt (CVDICT), tiếng Anh (CC-CEDICT) hoặc cả hai, khoảng 130.000 mục từ, kèm âm Hán Việt. Tra ngay trên máy.</dd></div>
+        <div><dt data-i="d3.t">App chat</dt><dd data-i="d3.d">Zalo, WeChat, WeCom, LINE, Telegram, QQ, DingTalk, Feishu, WhatsApp, Messenger, Discord, Teams, Slack, KakaoTalk. App tự tìm những app đã cài, bạn bật hoặc tắt từng cái.</dd></div>
+        <div><dt data-i="d4.t">Cách ghi pinyin</dt><dd data-i="d4.d">Dấu thanh (nǐ hǎo) hoặc số (ni3 hao3). Chỉnh được cỡ chữ và bật/tắt tô màu.</dd></div>
+        <div><dt data-i="d5.t">Riêng tư</dt><dd data-i="d5.d">App chỉ đọc đoạn chữ bạn vừa sao chép, xử lý trên máy, không lưu và không gửi đi đâu. Không cần tài khoản.</dd></div>
+        <div><dt data-i="d6.t">Ngôn ngữ giao diện</dt><dd>Tiếng Việt · English</dd></div>
+      </dl>
     </div>
   </div>
 </section>
 
+<!-- ================= Giao diện ================= -->
+<section class="block" id="themes">
+  <div class="wrap">
+    <div class="block-head">
+      <div class="label" data-i="th.label">Giao diện</div>
+      <div>
+        <h2 data-i="th.title">Tám mẫu cho khung pinyin</h2>
+        <p data-i="th.sub">Chọn trong phần Giao diện của app. Bấm tên mẫu để xem trước.</p>
+      </div>
+    </div>
+    <div class="themes">
+      <div class="spacer"></div>
+      <div class="swatches" id="swatches"></div>
+      <div class="stage"><div class="popup th-strawberry" id="themePopup"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Tải về ================= -->
+<section class="block" id="download">
+  <div class="wrap">
+    <div class="block-head">
+      <div class="label" data-i="dl.label">Tải về</div>
+      <div>
+        <h2 data-i="dl.title">Tải GenPiYi</h2>
+        <p data-i="dl.sub">Miễn phí. Mã nguồn công khai trên GitHub, giấy phép MIT.</p>
+      </div>
+    </div>
+    <div class="dl-table">
+      <div class="row" id="rowWin">
+        <div class="os" data-suggest="">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.5v7H3zM11.5 4.3 21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg>Windows
+        </div>
+        <div class="req"><span data-i="dl.winReq">Windows 10 hoặc 11 · x64 và ARM64 · không cần quyền quản trị</span>
+          <small data-i-html="dl.winNote">Nếu hiện “Windows protected your PC”, bấm More info → Run anyway. App chưa có chữ ký số.</small></div>
+        <div class="acts">
+          <a class="minor" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest" data-i="dl.portable">Bản chạy ngay</a>
+          <a class="btn btn-main dl-win" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest"><span data-i="dl.exe">Bộ cài .exe</span></a>
+        </div>
+      </div>
+      <div class="row" id="rowMac">
+        <div class="os" data-suggest="">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg>macOS
+        </div>
+        <div class="req"><span data-i="dl.macReq">macOS 13 Ventura trở lên · chip Apple và Intel</span>
+          <small data-i-html="dl.macNote">Lần đầu mở, vào Cài đặt hệ thống → Quyền riêng tư &amp; Bảo mật → Vẫn mở. App chưa được Apple công chứng.</small></div>
+        <div class="acts">
+          <a class="minor dl-mac-zip" href="https://github.com/dung-nguyentrung/genpiyi/releases" data-i="dl.zip">Bản .zip</a>
+          <a class="btn btn-main dl-mac" href="https://github.com/dung-nguyentrung/genpiyi/releases"><span data-i="dl.dmg">File .dmg</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="ver" id="ver"></div>
+  </div>
+</section>
+
+<!-- ================= Hỏi đáp ================= -->
+<section class="block" id="faq">
+  <div class="wrap">
+    <div class="block-head">
+      <div class="label" data-i="q.label">Hỏi đáp</div>
+      <div><h2 data-i="q.title">Câu hỏi thường gặp</h2></div>
+    </div>
+    <div class="specs">
+      <div class="spacer"></div>
+      <div class="faq">
+        <details><summary data-i="q1.q">GenPiYi có mất phí không?</summary><p data-i="q1.a">Không. App miễn phí, không quảng cáo, không có bản trả phí. Mã nguồn dùng giấy phép MIT.</p></details>
+        <details><summary data-i="q2.q">App có đọc tin nhắn của tôi không?</summary><p data-i="q2.a">App chỉ đọc đoạn chữ bạn vừa sao chép để hiện pinyin. Mọi thứ xử lý trên máy, không lưu lại và không gửi lên Internet.</p></details>
+        <details><summary data-i="q3.q">Vì sao Windows hoặc macOS cảnh báo khi mở?</summary><p data-i="q3.a">App chưa mua chữ ký số của Microsoft và chưa được Apple công chứng. Trên Windows bấm More info → Run anyway. Trên Mac vào Cài đặt hệ thống → Quyền riêng tư &amp; Bảo mật → Vẫn mở.</p></details>
+        <details><summary data-i="q4.q">Trên Mac, phím tắt không tự sao chép chữ đang bôi đen?</summary><p data-i="q4.a">Cần cho phép GenPiYi ở Cài đặt hệ thống → Quyền riêng tư &amp; Bảo mật → Trợ năng. Tính năng hiện pinyin khi sao chép không cần quyền này.</p></details>
+        <details><summary data-i="q5.q">App chat của tôi không có trong danh sách?</summary><p data-i="q5.a">Mở app chat đó, vào Cài đặt của GenPiYi và chọn “Thêm app khác đang mở”. Hoặc dùng phím tắt, cách này chạy ở mọi ứng dụng.</p></details>
+        <details><summary data-i="q6.q">Có bản cho điện thoại không?</summary><p data-i="q6.a">Chưa có. Hiện có bản Windows và macOS.</p></details>
+        <details><summary data-i="q7.q">Gỡ cài đặt thế nào?</summary><p data-i="q7.a">Windows: Settings → Apps → Installed apps → GenPiYi → Uninstall. macOS: bấm biểu tượng 拼 trên thanh menu → Thoát, rồi kéo GenPiYi từ Applications vào Thùng rác.</p></details>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
 <footer>
   <div class="wrap">
-    <div style="display:flex;align-items:center;gap:10px"><span class="logo" style="width:26px;height:26px;font-size:14px;border-radius:7px">拼</span>
-      <span>GenPiYi · <span data-i="foot.lic">Mã nguồn mở, giấy phép MIT</span></span></div>
-    <div style="display:flex;gap:18px">
+    <div class="line">
+      <span>GenPiYi · <span data-i="foot.lic">mã nguồn mở, giấy phép MIT</span></span>
       <a href="https://github.com/dung-nguyentrung/genpiyi" target="_blank" rel="noopener">GitHub</a>
       <a href="https://github.com/dung-nguyentrung/genpiyi/issues" target="_blank" rel="noopener" data-i="foot.bug">Báo lỗi</a>
-      <a href="https://github.com/dung-nguyentrung/genpiyi/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" data-i="foot.contrib">Đóng góp</a>
+      <a href="https://github.com/dung-nguyentrung/genpiyi/blob/main/CHANGELOG.md" target="_blank" rel="noopener" data-i="foot.changes">Nhật ký thay đổi</a>
     </div>
+    <div data-i-html="foot.data">Dữ liệu từ điển: <a href="https://github.com/ph0ngp/CVDICT" target="_blank" rel="noopener">CVDICT</a> và <a href="https://www.mdbg.net/chinese/dictionary?page=cedict" target="_blank" rel="noopener">CC-CEDICT</a> (CC BY-SA 4.0), âm Hán Việt từ <a href="https://www.unicode.org/charts/unihan.html" target="_blank" rel="noopener">Unihan</a>.</div>
   </div>
 </footer>
 
 <script>
-/* ---------------- Dữ liệu câu mẫu (pinyin + thanh) ---------------- */
-const SENT = [["你","nǐ",3],["好","hǎo",3],["！","",0],["今","jīn",1],["天","tiān",1],["晚","wǎn",3],["上","shang",5],
-              ["我","wǒ",3],["们","men",5],["去","qù",4],["哪","nǎ",3],["里","lǐ",3],["吃","chī",1],["饭","fàn",4],["？","",0]];
+/* ---------------- Câu mẫu: chữ, pinyin, thanh, mã từ ---------------- */
+const SENT = [["你","nǐ",3,0],["好","hǎo",3,0],["！","",0,-1],["今","jīn",1,1],["天","tiān",1,1],["晚","wǎn",3,2],["上","shang",5,2],
+              ["我","wǒ",3,3],["们","men",5,3],["去","qù",4,4],["哪","nǎ",3,5],["里","lǐ",3,5],["吃","chī",1,6],["饭","fàn",4,6],["？","",0,-1]];
 const PLAIN = "nǐ hǎo! jīntiān wǎnshang wǒmen qù nǎlǐ chīfàn?";
+const WORDS = [
+  { w: "你好", py: "nǐhǎo",     vi: "xin chào",                 en: "hello" },
+  { w: "今天", py: "jīntiān",   vi: "hôm nay",                  en: "today" },
+  { w: "晚上", py: "wǎnshang",  vi: "buổi tối",                 en: "evening; night" },
+  { w: "我们", py: "wǒmen",     vi: "chúng tôi; chúng ta",      en: "we; us" },
+  { w: "去",   py: "qù",        vi: "đi; đi đến (một nơi)",     en: "to go" },
+  { w: "哪里", py: "nǎlǐ",      vi: "ở đâu?",                   en: "where?" },
+  { w: "吃饭", py: "chīfàn",    vi: "ăn cơm; dùng bữa",         en: "to eat; to have a meal" },
+];
+const HV = { "今天": "kim thiên", "晚上": "vãn thượng", "去": "khứ" };
 
 const THEMES = [
-  {id:"dark", vi:"Đêm", en:"Night", sw:"#1C2029", emb:"拼"},
-  {id:"light", vi:"Trắng tinh", en:"Pure White", sw:"#FFFFFF", emb:"拼"},
-  {id:"strawberry", vi:"Sữa dâu", en:"Strawberry Milk", sw:"#FFC9D8", emb:"莓", deco:"♥"},
-  {id:"tabby", vi:"Mèo mướp", en:"Tabby Cat", sw:"#FFB25B", emb:"喵", deco:"🐾"},
-  {id:"matcha", vi:"Trà xanh", en:"Matcha", sw:"#8CC77A", emb:"茶", deco:"🍃"},
-  {id:"sakura", vi:"Hoa anh đào", en:"Cherry Blossom", sw:"#F8A5C2", emb:"樱", deco:"🌸"},
-  {id:"ocean", vi:"Biển xanh", en:"Ocean Blue", sw:"#6EC1FF", emb:"海", deco:"🫧"},
-  {id:"galaxy", vi:"Ngân hà", en:"Galaxy", sw:"#6A4BD0", emb:"星", deco:"✦"},
+  { id: "dark", vi: "Đêm", en: "Night", sw: "#1C2029", emb: "拼" },
+  { id: "light", vi: "Trắng tinh", en: "Pure White", sw: "#FFFFFF", emb: "拼" },
+  { id: "strawberry", vi: "Sữa dâu", en: "Strawberry Milk", sw: "#FFC9D8", emb: "莓" },
+  { id: "tabby", vi: "Mèo mướp", en: "Tabby Cat", sw: "#FFB25B", emb: "喵" },
+  { id: "matcha", vi: "Trà xanh", en: "Matcha", sw: "#8CC77A", emb: "茶" },
+  { id: "sakura", vi: "Hoa anh đào", en: "Cherry Blossom", sw: "#F8A5C2", emb: "樱" },
+  { id: "ocean", vi: "Biển xanh", en: "Ocean Blue", sw: "#6EC1FF", emb: "海" },
+  { id: "galaxy", vi: "Ngân hà", en: "Galaxy", sw: "#6A4BD0", emb: "星" },
 ];
 
-function popupHTML(theme, source) {
+const ICONS = {
+  book: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+  copy: '<rect x="8" y="8" width="12" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+  pin: '<path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8"/>',
+};
+const icon = n => `<svg viewBox="0 0 24 24">${ICONS[n]}</svg>`;
+
+function popupHTML(theme, source, vocabCount) {
   const cells = SENT.map(([h, p, t]) => t === 0
     ? `<div class="c punct"><span class="py"></span><span class="h">${h}</span></div>`
-    : `<div class="c"><span class="py t${t}">${p}</span><span class="h">${h}</span></div>`).join("");
-  return `<div class="ears"><b></b><b></b></div>
-    <div class="p-head"><span class="p-emb">${theme.emb}</span>Pinyin<span class="p-chip">${source}</span>
-      <span class="p-btns"><span>⧉</span><span>汉</span><span>📌</span><span>✕</span></span></div>
+    : `<div class="c"><span class="py p${t}">${p}</span><span class="h">${h}</span></div>`).join("");
+  const vocab = WORDS.slice(0, vocabCount).map(v =>
+    `<div><b>${v.w}<small>${v.py}</small></b><span>${lang === "en" ? v.en : v.vi}</span></div>`).join("");
+  return `<div class="p-head"><span class="p-emb">${theme.emb}</span>Pinyin<span class="p-chip">${source}</span>
+      <span class="p-btns">${icon("book")}${icon("copy")}${icon("pin")}${icon("x")}</span></div>
     <div class="ruby">${cells}</div>
-    ${theme.deco ? `<div class="p-deco">${theme.deco}</div>` : ""}
-    <div class="p-foot">${PLAIN}</div>`;
+    <div class="p-foot">${PLAIN}${vocabCount ? `<div class="vocab">${vocab}</div>` : ""}</div>`;
 }
 
 /* ---------------- Song ngữ ---------------- */
-const I18N = {
-  en: {
-    "nav.features":"Features","nav.how":"How it works","nav.themes":"Themes","nav.faq":"FAQ",
-    "hero.pill":"✨ Free · Open source · Windows & macOS",
-    "hero.title":'Read any <span class="grad">Chinese</span> message — just copy it',
-    "hero.lead":"Right-click a message in WeChat, LINE, Zalo… choose Copy, and pinyin appears right next to your cursor — with tone marks, tone colors and correct readings for polyphonic characters.",
-    "cta.download":"Download for Windows","cta.free":"Free · no admin rights needed","cta.how":"See how it works",
-    "cta.mac":"Download for macOS","cta.macSub":"macOS 13+ · Apple silicon & Intel",
-    "meta.1":"Works offline","meta.2":"No ads","meta.3":"Windows 10 / 11","meta.4":"macOS 13+",
-    "demo.reply":"Got it, thanks 👍","demo.reply2":"Reply","demo.copy":"Copy","demo.forward":"Forward","demo.delete":"Delete",
-    "f.kicker":"Features","f.title":"Small, focused, never in your way","f.sub":"GenPiYi sits quietly in the system tray (Windows) or menu bar (macOS) and only shows up when you need it.",
-    "f1.t":"Copy to see pinyin","f1.d":"Right-click → Copy in your chat app and the popup appears next to the cursor. No extra windows.",
-    "f2.t":"Works with your chat apps","f2.d":"WeChat, WeCom, LINE, Telegram, QQ, DingTalk, Feishu, WhatsApp, Messenger, Discord, Zalo… auto-detected, toggle each one.",
-    "f3.t":"Hotkey everywhere","f3.d":"Select text in a browser, Word, a PDF… and press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>P</kbd> (Mac: <kbd>⌃</kbd>+<kbd>⌥</kbd>+<kbd>P</kbd>).",
-    "f4.t":"Context-aware readings","f4.d":'Polyphonic characters read correctly: <span class="hz">银行</span> yínháng, <span class="hz">行走</span> xíngzǒu. Hover to see alternatives.',
-    "f5.t":"Tone colors","f5.d":"Each tone has its own color — great for learners. Choose tone marks (nǐ hǎo) or numbers (ni3 hao3).",
-    "f6.t":"Private & offline","f6.d":"No account, no data leaves your PC. Fully open source on GitHub.",
-    "h.kicker":"How it works","h.title":"3 steps, under a minute",
-    "s1.t":"Download & install","s1.d":"Windows: get GenPiYi-Setup.exe, open it and click Install. macOS: get the .dmg and drag GenPiYi into Applications. Nothing else to install.",
-    "s2.t":"Right-click → Copy","s2.d":"In WeChat, LINE, Zalo… right-click a Chinese message and choose Copy / 复制 (on a Mac you can also select it and press ⌘C).",
-    "s3.t":"Read the pinyin","s3.d":"The popup appears next to your cursor. Copy the pinyin, pin the popup, or click outside to close — you can keep typing.",
-    "t.kicker":"Themes","t.title":"8 popup themes to choose from","t.sub":"From minimal to cute. Tap one to preview:",
-    "d.title":"Ready to try it?","d.sub":"Free forever. Download, install, then copy any Chinese message.",
-    "d.winReq":"Windows 10 / 11 · x64 & ARM64","d.macReq":"macOS 13 Ventura or later · Apple silicon & Intel",
-    "cta.dmg":"Download for Mac (.dmg)","cta.zip":"Zipped .zip",
-    "d.macNote":"Mac says it can't open the app? Go to <b>System Settings → Privacy & Security → Open Anyway</b>. The app isn't notarized by Apple yet — it's not a virus.",
-    "cta.download2":"Download installer (.exe)","cta.other":"Portable / ARM64",
-    "d.note":"“Windows protected your PC”? Click <b>More info → Run anyway</b>. The app isn't code-signed yet — it's not a virus.",
-    "q.kicker":"FAQ","q.title":"Frequently asked questions",
-    "q1.q":"Is GenPiYi free?","q1.a":"Yes — completely free and open source (MIT license). No ads, no paid tier.",
-    "q2.q":"Why does Windows warn me when I open the installer?","q2.a":"Windows SmartScreen warns about any software without a paid code-signing certificate. Click “More info” → “Run anyway”. All source code is public on GitHub.",
-    "q3.q":"Does it read my messages?","q3.a":"No. GenPiYi only reads the text you just copied to show its pinyin, processes it locally and never stores or sends it. The app doesn't connect to the Internet.",
-    "q4.q":"My chat app isn't listed?","q4.a":"Open that chat app, then in GenPiYi Settings choose “Add another open app” and click Add. Or use the Ctrl+Alt+P hotkey (Mac: ⌃⌥P) — it works in any app.",
-    "q7.q":"My Mac says GenPiYi can't be opened?","q7.a":"The app isn't notarized by Apple yet, so macOS blocks the first launch. Go to <b>System Settings → Privacy & Security</b>, scroll down and click <b>Open Anyway</b>. For the hotkey to copy the selected text, allow GenPiYi under <b>Accessibility</b> on the same page.",
-    "q5.q":"Is there a macOS or mobile version?","q5.a":"Yes, there's a macOS version (macOS 13+, Apple silicon & Intel) — it lives in the menu bar and works just like the Windows app. No mobile version yet; want to help build one? Come say hi on GitHub!",
-    "q6.q":"How do I uninstall it?","q6.a":"Windows: Settings → Apps → Installed apps, find GenPiYi and click Uninstall. macOS: click the 拼 menu-bar icon → Quit, then drag GenPiYi from Applications to the Trash.",
-    "foot.lic":"Open source, MIT license","foot.bug":"Report a bug","foot.contrib":"Contribute",
-    "copied":"Copy", "ver":"Latest version", "size":"Free · {size} · no admin rights needed"
-  }
+const EN = {
+  "nav.how": "How it works", "nav.details": "Details", "nav.download": "Download", "nav.faq": "FAQ",
+  "hero.title": "Copy a Chinese message and read its <em>pinyin</em> and meaning right next to your cursor.",
+  "hero.lead": "GenPiYi runs in the background. Right-click a message in WeChat, LINE or Zalo, choose Copy, and a small panel shows pinyin above every character, colored by tone, with the meaning of each word.",
+  "cta.win": "Download for Windows", "cta.mac": "Download for macOS",
+  "facts.1": "Free · MIT", "facts.2": "Works offline", "facts.3": "No data collection",
+  "demo.reply": "Got it, thanks",
+  "spec.title": "One cell per character, pinyin on top, colored by tone",
+  "spec.hint": "Hover or tap a character to see the meaning of the whole word, as in the app.",
+  "how.label": "How it works", "how.title": "No extra windows to open",
+  "how.sub": "Keep chatting as usual. GenPiYi only appears when you copy Chinese text or press the hotkey.",
+  "w1.k": "Right-click → Copy", "w1.t": "In your chat app",
+  "w1.d": "WeChat, LINE, Zalo, Telegram, QQ… Right-click a message and choose Copy / 复制. The pinyin panel appears next to the cursor.",
+  "w2.t": "Anywhere else",
+  "w2.d": "Select text in a browser, Word or a PDF and press the hotkey. With nothing selected, the app reads what's already on the clipboard.",
+  "w3.k": "Esc to close", "w3.t": "In the pinyin panel",
+  "w3.d": "See the meaning of each word, copy the pinyin, pin the panel. It never takes keyboard focus, so you can keep typing your reply.",
+  "det.label": "Details", "det.title": "What it does",
+  "d1.t": "Polyphonic characters", "d1.d": 'Read in context: <span class="hz">银行</span> yínháng, <span class="hz">行走</span> xíngzǒu. Characters with several readings get a dotted underline; hover to see them.',
+  "d2.t": "Word meanings", "d2.d": "Vietnamese (CVDICT), English (CC-CEDICT) or both, about 130,000 entries, plus Sino-Vietnamese readings. Looked up on your computer.",
+  "d3.t": "Chat apps", "d3.d": "WeChat, WeCom, LINE, Telegram, QQ, DingTalk, Feishu, WhatsApp, Messenger, Discord, Teams, Slack, KakaoTalk, Zalo. The app finds the ones you have installed; switch each on or off.",
+  "d4.t": "Pinyin style", "d4.d": "Tone marks (nǐ hǎo) or numbers (ni3 hao3). Adjustable size, tone colors on or off.",
+  "d5.t": "Privacy", "d5.d": "The app only reads the text you just copied, processes it on your computer, and never stores or sends it. No account needed.",
+  "d6.t": "Interface language",
+  "th.label": "Themes", "th.title": "Eight looks for the pinyin panel", "th.sub": "Pick one under Themes in the app. Click a name to preview it.",
+  "dl.label": "Download", "dl.title": "Download GenPiYi", "dl.sub": "Free. Source code on GitHub under the MIT license.",
+  "dl.winReq": "Windows 10 or 11 · x64 and ARM64 · no admin rights needed",
+  "dl.winNote": "If you see “Windows protected your PC”, click More info → Run anyway. The app isn't code-signed yet.",
+  "dl.portable": "Portable version", "dl.exe": "Installer .exe",
+  "dl.macReq": "macOS 13 Ventura or later · Apple silicon and Intel",
+  "dl.macNote": "On first launch, go to System Settings → Privacy &amp; Security → Open Anyway. The app isn't notarized by Apple yet.",
+  "dl.zip": ".zip archive", "dl.dmg": ".dmg file",
+  "q.label": "FAQ", "q.title": "Common questions",
+  "q1.q": "Does GenPiYi cost anything?", "q1.a": "No. It's free, with no ads and no paid tier. The source code is MIT-licensed.",
+  "q2.q": "Does the app read my messages?", "q2.a": "It only reads the text you just copied, to show its pinyin. Everything runs on your computer; nothing is stored or sent to the Internet.",
+  "q3.q": "Why does Windows or macOS warn me when I open it?", "q3.a": "The app isn't code-signed by Microsoft or notarized by Apple yet. On Windows click More info → Run anyway. On a Mac go to System Settings → Privacy & Security → Open Anyway.",
+  "q4.q": "On a Mac, the hotkey doesn't copy the selected text?", "q4.a": "Allow GenPiYi under System Settings → Privacy & Security → Accessibility. The copy-to-see-pinyin feature works without it.",
+  "q5.q": "My chat app isn't listed?", "q5.a": "Open that chat app, then in GenPiYi's Settings choose “Add another open app”. Or use the hotkey, which works in any app.",
+  "q6.q": "Is there a mobile version?", "q6.a": "Not yet. There are Windows and macOS versions.",
+  "q7.q": "How do I uninstall it?", "q7.a": "Windows: Settings → Apps → Installed apps → GenPiYi → Uninstall. macOS: click the 拼 menu-bar icon → Quit, then drag GenPiYi from Applications to the Trash.",
+  "foot.lic": "open source, MIT license", "foot.bug": "Report a bug", "foot.changes": "Changelog",
+  "foot.data": 'Dictionary data: <a href="https://github.com/ph0ngp/CVDICT" target="_blank" rel="noopener">CVDICT</a> and <a href="https://www.mdbg.net/chinese/dictionary?page=cedict" target="_blank" rel="noopener">CC-CEDICT</a> (CC BY-SA 4.0), Sino-Vietnamese readings from <a href="https://www.unicode.org/charts/unihan.html" target="_blank" rel="noopener">Unihan</a>.',
+  "ver": "Latest", "suggest": "for your computer", "tone": "tone", "neutral": "neutral"
 };
-const VI = {};
+const VI = { "ver": "Bản mới nhất", "suggest": "dành cho máy bạn", "tone": "thanh", "neutral": "nhẹ" };
 document.querySelectorAll("[data-i]").forEach(el => VI[el.dataset.i] = el.textContent);
 document.querySelectorAll("[data-i-html]").forEach(el => VI[el.dataset.iHtml] = el.innerHTML);
-VI["ver"] = "Phiên bản mới nhất"; VI["size"] = "Miễn phí · {size} · không cần quyền admin";
-I18N.vi = VI;
 
-let lang = "vi", activeTheme = "strawberry", release = null;
-function t(k) { return (I18N[lang] && I18N[lang][k]) ?? I18N.vi[k] ?? k; }
+let lang = "vi", activeTheme = "strawberry", activeWord = 1;
+const t = k => (lang === "en" ? EN[k] : VI[k]) ?? VI[k] ?? k;
 
 function applyLang(l) {
   lang = l;
@@ -467,27 +555,57 @@ function applyLang(l) {
   document.querySelectorAll("[data-i-html]").forEach(el => el.innerHTML = t(el.dataset.iHtml));
   document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.lang === l));
   document.title = l === "en" ? "GenPiYi – Pinyin for Chinese chat messages" : "GenPiYi – Xem pinyin tin nhắn tiếng Trung";
-  renderChips(); renderPopups(); renderRelease();
+  document.querySelectorAll(".os").forEach(o => o.dataset.suggest = t("suggest"));
+  renderToneKey(); renderSwatches(); renderPopups(); renderGloss(); renderRelease();
   try { localStorage.setItem("genpiyi-lang", l); } catch (e) {}
 }
 
+/* ---------------- Mẫu chữ trên ô kẻ ---------------- */
+function renderCells() {
+  const box = document.getElementById("cells");
+  box.innerHTML = SENT.map(([h, p, tn, wid], i) =>
+    `<div class="cell${tn === 0 ? " pu" : ""}" data-w="${wid}" ${wid >= 0 ? 'tabindex="0"' : ""}>
+       <span class="py" style="color:var(--t${tn || 5})">${p}</span><span class="box hz">${h}</span></div>`).join("");
+  box.querySelectorAll(".cell").forEach(c => {
+    const w = +c.dataset.w;
+    if (w < 0) return;
+    const pick = () => { activeWord = w; renderGloss(); };
+    c.addEventListener("mouseenter", pick);
+    c.addEventListener("focus", pick);
+    c.addEventListener("click", pick);
+  });
+}
+function renderGloss() {
+  document.querySelectorAll(".cell").forEach(c => c.classList.toggle("on", +c.dataset.w === activeWord));
+  const v = WORDS[activeWord];
+  const hv = HV[v.w] ? `<small>${HV[v.w].toUpperCase()}</small>` : "";
+  document.getElementById("gloss").innerHTML =
+    `<span class="w hz">${v.w}</span><span class="r">${v.py}${hv}</span><span class="m">${lang === "en" ? v.en : v.vi}</span>`;
+}
+function renderToneKey() {
+  const names = ["", "1", "2", "3", "4", t("neutral")];
+  document.getElementById("toneKey").innerHTML = [1, 2, 3, 4, 5].map(n =>
+    `<span><i style="background:var(--t${n})"></i>${n < 5 ? t("tone") + " " : ""}${names[n]}</span>`).join("");
+}
+
+/* ---------------- Popup & mẫu giao diện ---------------- */
 function renderPopups() {
-  document.getElementById("heroPopup").innerHTML = popupHTML(THEMES[0], "WeChat");
+  document.getElementById("heroPopup").innerHTML = popupHTML(THEMES[0], "WeChat", 4);
   const th = THEMES.find(x => x.id === activeTheme);
   const tp = document.getElementById("themePopup");
   tp.className = "popup th-" + th.id;
-  tp.innerHTML = popupHTML(th, lang === "en" ? th.en : th.vi);
+  tp.innerHTML = popupHTML(th, lang === "en" ? th.en : th.vi, 3);
 }
-
-function renderChips() {
-  const box = document.getElementById("chips");
+function renderSwatches() {
+  const box = document.getElementById("swatches");
   box.innerHTML = THEMES.map(th =>
-    `<button class="chip ${th.id === activeTheme ? "on" : ""}" data-t="${th.id}"><i style="background:${th.sw}"></i>${lang === "en" ? th.en : th.vi}</button>`).join("");
-  box.querySelectorAll(".chip").forEach(b => b.onclick = () => { activeTheme = b.dataset.t; renderChips(); renderPopups(); });
+    `<button class="sw ${th.id === activeTheme ? "on" : ""}" data-t="${th.id}" aria-pressed="${th.id === activeTheme}">
+       <i style="background:${th.sw}"></i>${lang === "en" ? th.en : th.vi}</button>`).join("");
+  box.querySelectorAll(".sw").forEach(b => b.onclick = () => { activeTheme = b.dataset.t; renderSwatches(); renderPopups(); });
 }
 
-/* ---------------- Link tải trực tiếp bản mới nhất (GitHub API) ----------------
-   Bản Windows dùng tag v…, bản macOS dùng tag mac-v… → lấy danh sách release và chọn riêng từng bản. */
+/* ---------------- Link tải bản mới nhất (GitHub API) ----------------
+   Bản Windows dùng tag v…, bản macOS dùng tag mac-v… */
 let winRel = null, macRel = null;
 const isMac = /Macintosh|MacIntel/.test((navigator.platform || "") + " " + (navigator.userAgent || "")) && !/iPhone|iPad/.test(navigator.userAgent || "");
 function renderRelease() {
@@ -498,7 +616,7 @@ function renderRelease() {
     if (setup) {
       document.querySelectorAll(".dl-win").forEach(a => a.href = setup.browser_download_url);
       const s = document.querySelector(".dl-size");
-      if (s) s.textContent = t("size").replace("{size}", (setup.size / 1048576).toFixed(0) + " MB");
+      if (s) s.textContent = `${winRel.tag_name} · ${(setup.size / 1048576).toFixed(0)} MB`;
     }
   }
   if (macRel) {
@@ -511,15 +629,17 @@ function renderRelease() {
   if (vers.length) document.getElementById("ver").textContent = `${t("ver")}: ${vers.join(" · ")}`;
 }
 function suggestPlatform() {
-  // Người dùng Mac thấy nút macOS nổi bật trước
-  if (!isMac) return;
   const win = document.getElementById("heroWin"), mac = document.getElementById("heroMac");
-  win.classList.replace("btn-primary", "btn-ghost"); mac.classList.replace("btn-ghost", "btn-primary");
-  mac.parentNode.insertBefore(mac, win);
-  const plats = document.querySelectorAll(".plat");
-  plats[1].classList.add("suggest"); plats[1].parentNode.insertBefore(plats[1], plats[0]);
+  const rowWin = document.getElementById("rowWin"), rowMac = document.getElementById("rowMac");
+  if (isMac) {
+    win.classList.replace("btn-main", "btn-alt"); mac.classList.replace("btn-alt", "btn-main");
+    mac.parentNode.insertBefore(mac, win);
+    rowMac.classList.add("suggest");
+    rowMac.parentNode.insertBefore(rowMac, rowWin);
+  } else if (/Windows/.test(navigator.userAgent || "")) {
+    rowWin.classList.add("suggest");
+  }
 }
-suggestPlatform();
 fetch("https://api.github.com/repos/dung-nguyentrung/genpiyi/releases?per_page=30")
   .then(r => r.ok ? r.json() : null)
   .then(list => {
@@ -531,12 +651,11 @@ fetch("https://api.github.com/repos/dung-nguyentrung/genpiyi/releases?per_page=3
   }).catch(() => {});
 
 /* ---------------- Khởi tạo ---------------- */
+suggestPlatform();
+renderCells();
 document.querySelectorAll(".lang button").forEach(b => b.onclick = () => applyLang(b.dataset.lang));
 let saved = null; try { saved = localStorage.getItem("genpiyi-lang"); } catch (e) {}
 applyLang(saved || ((navigator.language || "").toLowerCase().startsWith("vi") ? "vi" : "en"));
-
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
-document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 </script>
 </body>
 </html>
