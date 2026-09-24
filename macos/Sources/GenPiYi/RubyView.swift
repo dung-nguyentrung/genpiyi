@@ -57,6 +57,12 @@ struct RubyView: View {
     var maxWidth: CGFloat = 530
     /// Chữ đang rê chuột / vừa bấm (để hiện cách đọc khác).
     var onFocus: ((PyToken?) -> Void)? = nil
+    /// Nghĩa theo mã từ (để hiện chú thích khi rê chuột).
+    var infos: [Int: WordInfo] = [:]
+    var meaningLang: String = "vi"
+    var showHanViet: Bool = true
+    /// Mã từ đang được chọn → cả từ sáng lên.
+    var highlightWord: Int? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -66,7 +72,9 @@ struct RubyView: View {
                 } else {
                     FlowLayout(maxWidth: maxWidth) {
                         ForEach(lines[li]) { t in
-                            RubyCell(token: t, theme: theme, hanziSize: hanziSize, toneColors: toneColors, onFocus: onFocus)
+                            RubyCell(token: t, theme: theme, hanziSize: hanziSize, toneColors: toneColors, onFocus: onFocus,
+                                     info: infos[t.wordId], meaningLang: meaningLang, showHanViet: showHanViet,
+                                     highlighted: highlightWord != nil && highlightWord == t.wordId && t.isHan)
                         }
                     }
                 }
@@ -81,6 +89,10 @@ struct RubyCell: View {
     let hanziSize: CGFloat
     let toneColors: Bool
     var onFocus: ((PyToken?) -> Void)?
+    var info: WordInfo? = nil
+    var meaningLang: String = "vi"
+    var showHanViet: Bool = true
+    var highlighted: Bool = false
 
     @State private var hover = false
 
@@ -95,6 +107,14 @@ struct RubyCell: View {
 
     private var tooltip: String {
         guard token.isHan else { return "" }
+        if let w = info, w.hasMeaning || w.hanViet != nil {
+            var s = "\(w.text)  \(w.pinyin)"
+            if showHanViet, let hv = w.hanViet { s += "  ·  " + hv.uppercased() }
+            let m = DictionaryService.meaningText(w, lang: meaningLang)
+            if !m.isEmpty { s += "\n" + m }
+            if token.alternatives.count > 1 { s += "\n\(token.text): " + token.alternatives.joined(separator: " / ") }
+            return s
+        }
         if token.alternatives.count > 1 { return "\(token.text)  ·  \(token.alternatives.joined(separator: " / "))" }
         if let p = token.pinyin { return "\(token.text)  ·  \(p)" }
         return ""
@@ -119,7 +139,7 @@ struct RubyCell: View {
         .padding(.top, 2)
         .background(
             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .fill(hover && token.isHan ? Color(hex: theme.cellHover) : Color.clear)
+                .fill((hover || highlighted) && token.isHan ? Color(hex: theme.cellHover) : Color.clear)
         )
         .padding(.bottom, 4)
         .contentShape(Rectangle())
@@ -132,5 +152,51 @@ struct RubyCell: View {
         .onTapGesture {
             if token.isHan { onFocus?(token) }
         }
+    }
+}
+
+/// Danh sách từ vựng: chữ Hán + pinyin + âm Hán Việt | nghĩa.
+struct VocabListView: View {
+    let words: [WordInfo]
+    let theme: PopupTheme
+    var meaningLang: String = "vi"
+    var showHanViet: Bool = true
+    var width: CGFloat? = 510
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(words.enumerated()), id: \.offset) { i, w in
+                HStack(alignment: .top, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(w.text)
+                            .font(.custom("PingFang SC", size: 17))
+                            .foregroundColor(Color(hex: theme.hanzi))
+                        Text(w.pinyin)
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(hex: theme.pinyinDefault))
+                        if showHanViet, let hv = w.hanViet {
+                            Text(hv.uppercased())
+                                .font(.system(size: 10.5, weight: .medium))
+                                .foregroundColor(Color(hex: theme.sub))
+                        }
+                    }
+                    .frame(minWidth: 86, maxWidth: 170, alignment: .leading)
+                    .fixedSize(horizontal: true, vertical: false)
+
+                    let m = DictionaryService.meaningText(w, lang: meaningLang)
+                    Text(m.isEmpty ? "—" : m)
+                        .font(.system(size: 12.5))
+                        .foregroundColor(Color(hex: m.isEmpty ? theme.sub : theme.fg))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, 2)
+                }
+                .padding(.vertical, 6)
+                if i < words.count - 1 {
+                    Rectangle().fill(Color(hex: theme.divider)).frame(height: 1)
+                }
+            }
+        }
+        .frame(width: width, alignment: .leading)
     }
 }

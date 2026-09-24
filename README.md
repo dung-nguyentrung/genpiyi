@@ -35,6 +35,7 @@ GenPiYi is a small tray app. Right-click a Chinese message in your chat app, cho
 - **Chat-app scanner**: finds the chat apps installed on your PC and lets you switch each one on or off. By default only WeChat and Zalo are on.
 - **Global hotkey** (`Ctrl+Alt+P`, configurable): select text in any app, like a browser, Word or a PDF, and press the hotkey.
 - **Polyphonic characters** are read from context (银行 *yínháng* / 行走 *xíngzǒu*). Hover a character to see its other readings.
+- **Word meanings (offline)**: the popup lists each word with its Vietnamese and/or English meaning and its Sino-Vietnamese reading (银行 → *ngân hàng* · NGÂN HÀNG). Hover a character to see the meaning of the whole word.
 - **Tone marks or numbers** (`nǐ hǎo` / `ni3 hao3`), with tone colors and adjustable size.
 - **8 popup themes**: Night, Pure White, Strawberry Milk, Tabby Cat, Matcha, Cherry Blossom, Ocean Blue, Galaxy.
 - **Doesn't steal focus**: you can keep typing while the popup is open. Click outside or press Esc to close it.
@@ -110,7 +111,8 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), wh
 
 - Pinyin conversion: [ToolGood.Words.Pinyin](https://github.com/toolgood/ToolGood.Words)
 - Icons: Segoe Fluent Icons / Segoe MDL2 Assets (built into Windows)
+- Dictionary: [CVDICT](https://github.com/ph0ngp/CVDICT) (Vietnamese) and [CC-CEDICT](https://www.mdbg.net/chinese/dictionary?page=cedict) (English), both CC BY-SA 4.0; Sino-Vietnamese readings from [Unihan](https://www.unicode.org/charts/unihan.html). See [data/README.md](data/README.md).
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) for the source code. The dictionary data in `data/` is CC BY-SA 4.0.

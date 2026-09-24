@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import Combine
 
 /// Trạng thái của một popup pinyin.
 final class PopupModel: ObservableObject {
@@ -12,8 +13,14 @@ final class PopupModel: ObservableObject {
     let toneColors: Bool
     let contentWidth: CGFloat
     let scrolls: Bool
+    /// Nghĩa theo mã từ + danh sách từ vựng (rỗng nếu bản build không có từ điển).
+    let infos: [Int: WordInfo]
+    let vocab: [WordInfo]
+    let meaningLang: String
+    let showHanViet: Bool
 
     @Published var pinned = false
+    @Published var showVocab = false
     @Published var flashed: String? = nil      // nút vừa copy ("py" / "both")
     @Published var focused: PyToken? = nil
 
@@ -32,11 +39,17 @@ final class PopupModel: ObservableObject {
         self.plain = PinyinService.toPlainPinyin(lines)
         self.hanziSize = hz
         self.toneColors = settings.toneColors
+        let infos = DictionaryService.wordInfos(lines)
+        self.infos = infos
+        self.vocab = DictionaryService.vocabulary(lines, infos: infos)
+        self.meaningLang = settings.resolvedMeaningLang
+        self.showHanViet = settings.showHanViet
 
         // Đo trước bề rộng thật của phần chữ để popup co gọn theo nội dung
         let size = PopupModel.measure(lines: lines, theme: theme, hanziSize: hz, toneColors: settings.toneColors)
         self.contentWidth = min(PopupModel.maxContent, max(240, ceil(size.width) + 2))
         self.scrolls = size.height > 400
+        self.showVocab = settings.showVocab && !vocab.isEmpty
     }
 
     static func measure(lines: [[PyToken]], theme: PopupTheme, hanziSize: CGFloat, toneColors: Bool) -> CGSize {
@@ -78,6 +91,9 @@ struct PinyinPopupView: View {
             if let f = model.focused, f.isHan {
                 detail(f)
             }
+            if model.showVocab {
+                vocabSection
+            }
             footer
         }
         .background(DecorationsView(theme: t))
@@ -102,6 +118,14 @@ struct PinyinPopupView: View {
                     .background(Capsule().fill(Color(hex: t.chip)))
             }
             Spacer(minLength: 8)
+            if !model.vocab.isEmpty {
+                iconButton(model.showVocab ? "book.fill" : "book", tip: Loc.t(model.showVocab ? "popup.vocabHide" : "popup.vocab"),
+                           tint: model.showVocab ? Color(hex: t.accent) : nil) {
+                    model.showVocab.toggle()
+                    // Nhớ lựa chọn cho các lần sau
+                    AppSettings.shared.data.showVocab = model.showVocab
+                }
+            }
             iconButton(model.flashed == "py" ? "checkmark" : "doc.on.doc", tip: Loc.t("common.copyPinyin"),
                        tint: model.flashed == "py" ? Color(hex: "#2EB86E") : nil) { model.copy("py") }
             iconButton(model.flashed == "both" ? "checkmark" : "doc.on.clipboard", tip: Loc.t("popup.copyBoth"),
@@ -122,7 +146,9 @@ struct PinyinPopupView: View {
         let ruby = RubyView(lines: model.lines, theme: t, hanziSize: model.hanziSize, toneColors: model.toneColors,
                             maxWidth: model.contentWidth, onFocus: { tok in
                                 if let tok { model.focused = tok }
-                            })
+                            },
+                            infos: model.infos, meaningLang: model.meaningLang, showHanViet: model.showHanViet,
+                            highlightWord: model.focused?.wordId)
             .frame(width: model.contentWidth, alignment: .leading)
         if model.scrolls {
             ScrollView(.vertical) { ruby }
@@ -134,7 +160,50 @@ struct PinyinPopupView: View {
         }
     }
 
+    @ViewBuilder
     private func detail(_ tok: PyToken) -> some View {
+        if let w = model.infos[tok.wordId], w.hasMeaning || w.hanViet != nil {
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 6) {
+                    Text(w.text).font(.custom("PingFang SC", size: 14)).foregroundColor(Color(hex: t.hanzi))
+                    Text(w.pinyin).font(.system(size: 12, weight: .medium)).foregroundColor(Color(hex: t.pinyinDefault))
+                    if model.showHanViet, let hv = w.hanViet {
+                        Text("· " + hv.uppercased()).font(.system(size: 11, weight: .medium)).foregroundColor(Color(hex: t.sub))
+                    }
+                }
+                let m = DictionaryService.meaningText(w, lang: model.meaningLang)
+                if !m.isEmpty {
+                    Text(m).font(.system(size: 12)).foregroundColor(Color(hex: t.fg))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                if tok.alternatives.count > 1 {
+                    Text("\(tok.text): " + tok.alternatives.joined(separator: " / "))
+                        .font(.system(size: 11)).foregroundColor(Color(hex: t.sub))
+                }
+            }
+            .padding(.horizontal, 16).padding(.bottom, 6)
+            .frame(width: model.contentWidth + 22, alignment: .leading)
+        } else {
+            plainDetail(tok)
+        }
+    }
+
+    private var vocabSection: some View {
+        let list = VocabListView(words: model.vocab, theme: t, meaningLang: model.meaningLang,
+                                 showHanViet: model.showHanViet, width: model.contentWidth - 4)
+        return VStack(spacing: 0) {
+            Rectangle().fill(Color(hex: t.divider)).frame(height: 1)
+            if model.vocab.count > 6 {
+                ScrollView(.vertical) { list }
+                    .frame(width: model.contentWidth + 6, height: 230)
+                    .padding(.leading, 14).padding(.vertical, 4)
+            } else {
+                list.padding(.leading, 14).padding(.trailing, 8).padding(.vertical, 4)
+            }
+        }
+    }
+
+    private func plainDetail(_ tok: PyToken) -> some View {
         HStack(spacing: 6) {
             Text(tok.text).font(.custom("PingFang SC", size: 13)).foregroundColor(Color(hex: t.hanzi))
             Text("·").foregroundColor(Color(hex: t.sub))
@@ -217,6 +286,8 @@ final class PopupController {
     let model: PopupModel
     private let panel = PopupPanel.make()
     private var monitors: [Any] = []
+    private var host: NSHostingView<PinyinPopupView>?
+    private var changeSub: AnyCancellable?
     private(set) var isClosed = false
     var onClosed: (() -> Void)?
 
@@ -233,6 +304,25 @@ final class PopupController {
         host.frame = NSRect(origin: .zero, size: size)
         panel.contentView = host
         panel.setContentSize(size)
+        self.host = host
+
+        // Nội dung đổi (mở danh sách từ, hiện nghĩa khi rê chuột) → co giãn popup, giữ nguyên mép trên
+        changeSub = model.objectWillChange.sink { [weak self] _ in
+            DispatchQueue.main.async { self?.resizeToFit() }
+        }
+    }
+
+    private func resizeToFit() {
+        guard !isClosed, let host else { return }
+        host.layoutSubtreeIfNeeded()
+        let size = host.fittingSize
+        let old = panel.frame
+        guard abs(size.height - old.height) > 0.5 || abs(size.width - old.width) > 0.5 else { return }
+        var frame = NSRect(x: old.minX, y: old.maxY - size.height, width: size.width, height: size.height)
+        if let vf = panel.screen?.visibleFrame, frame.minY < vf.minY {
+            frame.origin.y = vf.minY   // không tràn xuống dưới màn hình
+        }
+        panel.setFrame(frame, display: true)
     }
 
     func show() {
@@ -281,6 +371,7 @@ final class PopupController {
     func close() {
         guard !isClosed else { return }
         isClosed = true
+        changeSub = nil
         monitors.forEach { NSEvent.removeMonitor($0) }
         monitors.removeAll()
         NSAnimationContext.runAnimationGroup({ ctx in

@@ -25,4 +25,10 @@
     <PackageReference Include="ToolGood.Words.Pinyin" Version="*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Từ điển offline (CVDICT / CC-CEDICT / Unihan) – tạo bằng: python tools/build_dict.py -->
+    <EmbeddedResource Include="..\data\genpiyi-dict.tsv.deflate" LogicalName="genpiyi-dict.tsv.deflate"
+                      Condition="Exists('..\data\genpiyi-dict.tsv.deflate')" Link="Data\genpiyi-dict.tsv.deflate" />
+  </ItemGroup>
+
 </Project>

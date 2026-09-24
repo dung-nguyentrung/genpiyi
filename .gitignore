@@ -74,3 +74,6 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 .DS_Store
+
+## Dữ liệu từ điển tải về khi chạy tools/build_dict.py
+tools/.dict-cache/

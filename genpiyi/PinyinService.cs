@@ -17,6 +17,12 @@ namespace genpiyi
         public int Tone { get; init; }
         /// <summary>Các cách đọc khác của chữ (chữ đa âm).</summary>
         public string[] Alternatives { get; init; } = Array.Empty<string>();
+        /// <summary>Âm tiết không dấu, vd "zhong" (để so với pinyin trong từ điển).</summary>
+        public string? PinyinBase { get; init; }
+        /// <summary>Mã từ (các chữ cùng một từ trong từ điển có cùng mã), -1 nếu không phải chữ Hán.</summary>
+        public int WordId { get; set; } = -1;
+        /// <summary>Từ chứa chữ này, vd 银行 cho cả 银 và 行.</summary>
+        public string? Word { get; set; }
     }
 
     /// <summary>
@@ -210,6 +216,7 @@ namespace genpiyi
             var lines = new List<List<PyToken>>();
             var line = new List<PyToken>();
             var buffer = new StringBuilder();
+            int wordId = 0;
 
             void FlushBuffer()
             {
@@ -224,6 +231,7 @@ namespace genpiyi
                 if (c == '\n')
                 {
                     FlushBuffer();
+                    AssignWords(line, ref wordId);
                     lines.Add(line);
                     line = new List<PyToken>();
                     continue;
@@ -233,6 +241,7 @@ namespace genpiyi
                 {
                     FlushBuffer();
                     string? py = null;
+                    string? pyBase = null;
                     int tone = 0;
                     var r = raw[i];
                     if (!string.IsNullOrWhiteSpace(r) && !ContainsHan(r))
@@ -241,6 +250,7 @@ namespace genpiyi
                         if (b.Length > 0)
                         {
                             py = FormatSyllable(b, t, toneStyle);
+                            pyBase = b;
                             tone = t;
                         }
                     }
@@ -250,6 +260,7 @@ namespace genpiyi
                         IsHan = true,
                         Pinyin = py,
                         Tone = tone,
+                        PinyinBase = pyBase,
                         Alternatives = GetAlternatives(c, toneStyle)
                     });
                 }
@@ -264,8 +275,36 @@ namespace genpiyi
                 }
             }
             FlushBuffer();
+            AssignWords(line, ref wordId);
             lines.Add(line);
             return lines;
+        }
+
+        /// <summary>Gom các chữ Hán liền nhau thành từ theo từ điển (银行, 吃饭…) và gán mã từ.</summary>
+        private static void AssignWords(List<PyToken> line, ref int wordId)
+        {
+            int i = 0;
+            while (i < line.Count)
+            {
+                if (!line[i].IsHan) { i++; continue; }
+                int j = i;
+                while (j < line.Count && line[j].IsHan) j++;
+                var run = line.GetRange(i, j - i);
+                var lengths = DictionaryService.Segment(run.Select(t => t.Text).ToList());
+                int k = 0;
+                foreach (var len in lengths)
+                {
+                    var word = string.Concat(run.Skip(k).Take(len).Select(t => t.Text));
+                    for (int m = k; m < k + len; m++)
+                    {
+                        run[m].WordId = wordId;
+                        run[m].Word = word;
+                    }
+                    wordId++;
+                    k += len;
+                }
+                i = j;
+            }
         }
 
         private static readonly Dictionary<char, char> PunctMap = new()

@@ -80,6 +80,8 @@ struct SettingsPage: View {
                     toneLegend
                 }
                 Divider().padding(.vertical, 12)
+                dictionaryRows
+                Divider().padding(.vertical, 12)
                 row(Loc.t("set.popupTheme"), Loc.t("set.using") + settings.theme.locName) {
                     HStack(spacing: 10) {
                         EmblemView(theme: settings.theme, size: 22)
@@ -137,6 +139,42 @@ struct SettingsPage: View {
             Spacer(minLength: 12)
             trailing()
         }
+    }
+
+    private var meaningBinding: Binding<String> {
+        Binding(get: { settings.data.resolvedMeaningLang },
+                set: { v in if v != settings.data.resolvedMeaningLang { settings.data.meaningLang = v } })
+    }
+
+    @ViewBuilder
+    private var dictionaryRows: some View {
+        let dict = DictionaryService.available
+        VStack(alignment: .leading, spacing: 12) {
+            row(Loc.t("set.vocab"), Loc.t("set.vocabDesc")) {
+                Toggle("", isOn: $settings.data.showVocab).toggleStyle(.switch).labelsHidden()
+            }
+            VStack(alignment: .leading, spacing: 12) {
+                row(Loc.t("set.meaningLang"), Loc.t("set.meaningLangDesc")) {
+                    Picker("", selection: meaningBinding) {
+                        Text(Loc.t("set.meanVi")).tag("vi")
+                        Text(Loc.t("set.meanEn")).tag("en")
+                        Text(Loc.t("set.meanBoth")).tag("both")
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .frame(width: 240)
+                }
+                row(Loc.t("set.hanviet"), Loc.t("set.hanvietDesc")) {
+                    Toggle("", isOn: $settings.data.showHanViet).toggleStyle(.switch).labelsHidden()
+                }
+            }
+            .padding(.leading, 20)
+            Text(dict ? Loc.f("set.dictCredit", DictionaryService.entryCount) : Loc.t("set.dictMissing"))
+                .font(.system(size: 11))
+                .foregroundColor(dict ? .secondary : Brand.accent)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .disabled(!dict)
     }
 
     private var toneLegend: some View {

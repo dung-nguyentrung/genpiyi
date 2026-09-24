@@ -11,6 +11,10 @@ struct PyToken: Identifiable, Hashable {
     let tone: Int
     /// Các cách đọc khác của chữ (chữ đa âm).
     let alternatives: [String]
+    /// Âm tiết không dấu, vd "zhong" (để so với pinyin trong từ điển).
+    var pinyinBase: String? = nil
+    /// Mã từ: các chữ cùng một từ trong từ điển (银行…) có cùng mã; -1 nếu không phải chữ Hán.
+    var wordId: Int = -1
 }
 
 /// Chuyển Hán tự sang pinyin bằng bộ chuyển đổi có sẵn của macOS (CFStringTransform, 100% offline).
@@ -100,6 +104,7 @@ enum PinyinService {
         var line: [PyToken] = []
         var buffer = ""
         var nextId = 0
+        var wordId = 0
 
         func flush() {
             guard !buffer.isEmpty else { return }
@@ -111,6 +116,7 @@ enum PinyinService {
         for (idx, c) in chars.enumerated() {
             if c == "\n" {
                 flush()
+                assignWords(&line, wordId: &wordId)
                 lines.append(line)
                 line = []
                 continue
@@ -118,13 +124,14 @@ enum PinyinService {
             if isHan(c) {
                 flush()
                 var py: String?
+                var pyBase: String?
                 var tone = 0
                 if let r = raw[idx], !r.trimmingCharacters(in: .whitespaces).isEmpty {
                     let (b, t) = normalize(r)
-                    if !b.isEmpty { py = formatSyllable(b, tone: t, style: style); tone = t }
+                    if !b.isEmpty { py = formatSyllable(b, tone: t, style: style); pyBase = b; tone = t }
                 }
                 line.append(PyToken(id: nextId, text: String(c), isHan: true, pinyin: py, tone: tone,
-                                    alternatives: alternatives(for: c, current: py, style: style)))
+                                    alternatives: alternatives(for: c, current: py, style: style), pinyinBase: pyBase))
                 nextId += 1
             } else if c.isLetter || c.isNumber {
                 buffer.append(c) // gom chữ Latin/số thành 1 từ
@@ -135,8 +142,26 @@ enum PinyinService {
             }
         }
         flush()
+        assignWords(&line, wordId: &wordId)
         lines.append(line)
         return lines
+    }
+
+    /// Gom các chữ Hán liền nhau thành từ theo từ điển (银行, 吃饭…) và gán mã từ.
+    private static func assignWords(_ line: inout [PyToken], wordId: inout Int) {
+        var i = 0
+        while i < line.count {
+            guard line[i].isHan else { i += 1; continue }
+            var j = i
+            while j < line.count && line[j].isHan { j += 1 }
+            var k = i
+            for len in DictionaryService.segment(line[i..<j].map(\.text)) {
+                for m in k..<(k + len) { line[m].wordId = wordId }
+                wordId += 1
+                k += len
+            }
+            i = j
+        }
     }
 
     private static func alternatives(for c: Character, current: String?, style: String) -> [String] {

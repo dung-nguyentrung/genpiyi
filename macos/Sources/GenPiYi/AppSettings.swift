@@ -20,6 +20,17 @@ struct SettingsData: Codable, Equatable {
     var hanziFontSize: Double = 26
     /// "vi" hoặc "en". Trống = theo ngôn ngữ macOS.
     var language = ""
+    /// Hiện danh sách từ vựng kèm nghĩa trong popup.
+    var showVocab = true
+    /// Ngôn ngữ của nghĩa: "auto" (theo ngôn ngữ app), "vi", "en", "both".
+    var meaningLang = "auto"
+    /// Hiện âm Hán Việt (银行 → NGÂN HÀNG).
+    var showHanViet = true
+
+    /// Ngôn ngữ nghĩa thực tế ("vi" / "en" / "both").
+    var resolvedMeaningLang: String {
+        ["vi", "en", "both"].contains(meaningLang) ? meaningLang : (language == "en" ? "en" : "vi")
+    }
 
     init() {}
 
@@ -37,6 +48,9 @@ struct SettingsData: Codable, Equatable {
         popupTheme = (try? c.decode(String.self, forKey: .popupTheme)) ?? d.popupTheme
         hanziFontSize = (try? c.decode(Double.self, forKey: .hanziFontSize)) ?? d.hanziFontSize
         language = (try? c.decode(String.self, forKey: .language)) ?? d.language
+        showVocab = (try? c.decode(Bool.self, forKey: .showVocab)) ?? d.showVocab
+        meaningLang = (try? c.decode(String.self, forKey: .meaningLang)) ?? d.meaningLang
+        showHanViet = (try? c.decode(Bool.self, forKey: .showHanViet)) ?? d.showHanViet
         if hanziFontSize < 14 || hanziFontSize > 60 { hanziFontSize = 26 }
     }
 }

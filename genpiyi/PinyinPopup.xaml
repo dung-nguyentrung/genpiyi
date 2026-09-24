@@ -70,10 +70,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Hình trang trí theo mẫu giao diện (nằm dưới nội dung) -->
-            <ContentControl x:Name="DecoHost" Grid.RowSpan="4" IsHitTestVisible="False" Focusable="False"/>
+            <ContentControl x:Name="DecoHost" Grid.RowSpan="5" IsHitTestVisible="False" Focusable="False"/>
 
             <!-- Thanh tiêu đề: kéo để di chuyển -->
             <Grid x:Name="Header" Grid.Row="0" Background="Transparent" Margin="14,8,8,2"
@@ -94,6 +95,8 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnVocab" Style="{StaticResource PopupIconButton}" Content="&#xE82D;"
+                            Click="BtnVocab_Click" ToolTip="{DynamicResource S.popup.vocab}" Visibility="Collapsed"/>
                     <Button x:Name="BtnCopyPinyin" Style="{StaticResource PopupIconButton}" Content="&#xE8C8;"
                             Click="BtnCopyPinyin_Click" ToolTip="{DynamicResource S.common.copyPinyin}"/>
                     <Button x:Name="BtnCopyBoth" Style="{StaticResource PopupIconButton}" Content="&#xE8C1;"
@@ -111,11 +114,20 @@
                 <ContentControl x:Name="RubyHost"/>
             </ScrollViewer>
 
-            <TextBlock x:Name="ErrorLabel" Grid.Row="2" Foreground="#FFB454" FontSize="12"
+            <!-- Từ vựng + nghĩa -->
+            <Border x:Name="VocabBorder" Grid.Row="2" BorderBrush="{DynamicResource P.Divider}" BorderThickness="0,1,0,0"
+                    Visibility="Collapsed">
+                <ScrollViewer MaxHeight="230" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                              Margin="14,4,10,6">
+                    <ContentControl x:Name="VocabHost"/>
+                </ScrollViewer>
+            </Border>
+
+            <TextBlock x:Name="ErrorLabel" Grid.Row="3" Foreground="#FFB454" FontSize="12"
                        Margin="16,0,16,8" TextWrapping="Wrap" Visibility="Collapsed"/>
 
             <!-- Chuỗi pinyin thuần (bôi đen để copy được) -->
-            <Border x:Name="FooterBorder" Grid.Row="3" Background="{DynamicResource P.Footer}" BorderBrush="{DynamicResource P.Divider}"
+            <Border x:Name="FooterBorder" Grid.Row="4" Background="{DynamicResource P.Footer}" BorderBrush="{DynamicResource P.Divider}"
                     BorderThickness="0,1,0,0" CornerRadius="0,0,12,12" Padding="12,7,12,9">
                 <TextBox x:Name="PlainPinyin" IsReadOnly="True" BorderThickness="0" Background="Transparent"
                          Foreground="{DynamicResource P.Sub}" FontSize="12.5" TextWrapping="Wrap"

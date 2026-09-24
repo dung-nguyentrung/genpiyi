@@ -98,6 +98,12 @@ namespace genpiyi
             RbEn.IsChecked = Loc.IsEn;
             LangLabel.Text = Loc.IsEn ? "EN" : "VI";
             ChkToneColors.IsChecked = s.ToneColors;
+            ChkVocab.IsChecked = s.ShowVocab;
+            ChkHanViet.IsChecked = s.ShowHanViet;
+            var ml = s.ResolvedMeaningLang;
+            RbMeanVi.IsChecked = ml == "vi";
+            RbMeanEn.IsChecked = ml == "en";
+            RbMeanBoth.IsChecked = ml == "both";
             ChkStartup.IsChecked = s.StartWithWindows;
             FontSlider.Value = s.HanziFontSize;
             FontLabel.Text = $"{s.HanziFontSize:0}";
@@ -121,6 +127,13 @@ namespace genpiyi
             bool appsActive = s.AutoOnCopy && s.OnlyChatApps;
             ChatAppsArea.IsEnabled = appsActive;
             ChatAppsArea.Opacity = appsActive ? 1 : 0.45;
+
+            bool dict = DictionaryService.Available;
+            ChkVocab.IsEnabled = dict;
+            DictOptions.IsEnabled = dict;
+            DictOptions.Opacity = dict ? 1 : 0.45;
+            DictStatus.Text = dict ? Loc.F("set.dictCredit", DictionaryService.EntryCount) : Loc.T("set.dictMissing");
+            DictStatus.Foreground = dict ? (Brush)FindResource("TextMutedBrush") : ErrBrush;
         }
 
         private void Setting_Changed(object sender, RoutedEventArgs e)
@@ -131,6 +144,14 @@ namespace genpiyi
             s.OnlyChatApps = ChkChatOnly.IsChecked == true;
             s.ToneColors = ChkToneColors.IsChecked == true;
             s.ToneStyle = RbNumber.IsChecked == true ? "number" : "mark";
+            s.ShowVocab = ChkVocab.IsChecked == true;
+            s.ShowHanViet = ChkHanViet.IsChecked == true;
+            if (RbMeanVi.IsChecked == true || RbMeanEn.IsChecked == true || RbMeanBoth.IsChecked == true)
+            {
+                var ml = RbMeanEn.IsChecked == true ? "en" : RbMeanBoth.IsChecked == true ? "both" : "vi";
+                // Giữ "auto" nếu người dùng chưa đổi (nghĩa đi theo ngôn ngữ app)
+                if (ml != s.ResolvedMeaningLang) s.MeaningLang = ml;
+            }
 
             bool startup = ChkStartup.IsChecked == true;
             if (startup != s.StartWithWindows)
@@ -756,6 +777,10 @@ namespace genpiyi
             PreviewHost.Content = RubyBuilder.Build(lines, s, 600, ThemeCatalog.Get("light"));
             _plain = PinyinService.ToPlainPinyin(lines);
             PlainBox.Text = _plain;
+
+            var vocab = DictionaryService.Available ? DictionaryService.Vocabulary(lines, s.ToneStyle) : new List<WordInfo>();
+            VocabCard.Visibility = vocab.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+            VocabPreviewHost.Content = vocab.Count > 0 ? RubyBuilder.BuildVocab(vocab, s, 640, ThemeCatalog.Get("light")) : null;
         }
 
         private void BtnPaste_Click(object sender, RoutedEventArgs e)

@@ -16,6 +16,7 @@ Bản macOS của GenPiYi — app nhỏ nằm trên **thanh menu** (biểu tư�
 | 8 mẫu popup (Đêm, Trắng tinh, Sữa dâu, Mèo mướp, Trà xanh, Hoa anh đào, Biển xanh, Ngân hà) | ✅ | ✅ |
 | Popup không chiếm focus, click ra ngoài / Esc để đóng, ghim | ✅ | ✅ |
 | Copy pinyin / copy chữ Hán + pinyin | ✅ | ✅ |
+| Nghĩa từ vựng offline (Việt / Anh) + âm Hán Việt | ✅ | ✅ (dùng chung `data/genpiyi-dict.tsv.deflate`) |
 | Tiếng Việt / English | ✅ | ✅ |
 | Khởi động cùng hệ điều hành | Registry | Login Items (`SMAppService`) |
 | 100% offline, không cần thư viện ngoài | ✅ | ✅ |

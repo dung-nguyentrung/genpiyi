@@ -261,12 +261,22 @@ struct LookupPage: View {
                 if PinyinService.containsHan(input) {
                     let ls = lines
                     RubyView(lines: ls, theme: theme, hanziSize: CGFloat(settings.data.hanziFontSize),
-                             toneColors: settings.data.toneColors, maxWidth: 620)
+                             toneColors: settings.data.toneColors, maxWidth: 620,
+                             infos: DictionaryService.wordInfos(ls), meaningLang: settings.data.resolvedMeaningLang,
+                             showHanViet: settings.data.showHanViet)
                     Divider().overlay(Color(hex: theme.divider))
                     Text(PinyinService.toPlainPinyin(ls))
                         .font(.system(size: 13))
                         .foregroundColor(Color(hex: theme.sub))
                         .textSelection(.enabled)
+                    let infos = DictionaryService.wordInfos(ls)
+                    let vocab = DictionaryService.vocabulary(ls, infos: infos)
+                    if !vocab.isEmpty {
+                        Divider().overlay(Color(hex: theme.divider))
+                        Text(Loc.t("try.vocab")).font(.system(size: 12, weight: .semibold)).foregroundColor(Color(hex: theme.sub))
+                        VocabListView(words: vocab, theme: theme, meaningLang: settings.data.resolvedMeaningLang,
+                                      showHanViet: settings.data.showHanViet, width: nil)
+                    }
                 } else {
                     Text(Loc.t("try.empty")).font(.system(size: 13)).foregroundColor(Color(hex: theme.sub))
                         .frame(maxWidth: .infinity, minHeight: 80)

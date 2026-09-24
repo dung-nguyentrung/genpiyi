@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Win32;
 
 namespace genpiyi
@@ -47,6 +48,20 @@ namespace genpiyi
 
         public double HanziFontSize { get; set; } = 26;
 
+        /// <summary>Hiện danh sách từ vựng kèm nghĩa trong popup.</summary>
+        public bool ShowVocab { get; set; } = true;
+
+        /// <summary>Ngôn ngữ của nghĩa: "auto" (theo ngôn ngữ app), "vi", "en", "both".</summary>
+        public string MeaningLang { get; set; } = "auto";
+
+        /// <summary>Hiện âm Hán Việt (vd 银行 → ngân hàng).</summary>
+        public bool ShowHanViet { get; set; } = true;
+
+        /// <summary>Ngôn ngữ nghĩa thực tế ("vi" / "en" / "both").</summary>
+        [JsonIgnore]
+        public string ResolvedMeaningLang =>
+            MeaningLang is "vi" or "en" or "both" ? MeaningLang : (Loc.IsEn ? "en" : "vi");
+
         public bool StartWithWindows { get; set; } = false;
 
         /// <summary>"vi" hoặc "en". Trống = lấy theo ngôn ngữ Windows.</summary>
@@ -77,6 +92,7 @@ namespace genpiyi
                         s.ChatApps ??= new List<string>();
                         s.CustomApps ??= new List<string>();
                         if (s.HanziFontSize < 14 || s.HanziFontSize > 60) s.HanziFontSize = 26;
+                        if (string.IsNullOrEmpty(s.MeaningLang)) s.MeaningLang = "auto";
                         if (s.SettingsVersion < 2) s.MigrateToV2();
                         return s;
                     }

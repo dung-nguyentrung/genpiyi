@@ -23,6 +23,7 @@ GenPiYi là app nhỏ chạy ở khay hệ thống. Chuột phải vào tin nh�
 - **Tự quét app chat trên máy**, bật/tắt từng app. Mặc định chỉ bật Zalo và WeChat.
 - **Phím tắt toàn cục** `Ctrl+Alt+P` (đổi được): bôi đen chữ ở bất kỳ đâu (trình duyệt, Word, PDF…) rồi bấm.
 - **Chữ đa âm được đọc theo ngữ cảnh** (银行 *yínháng* / 行走 *xíngzǒu*). Rê chuột vào chữ để xem các cách đọc khác.
+- **Nghĩa từ vựng (offline)**: popup liệt kê từng từ kèm nghĩa tiếng Việt và/hoặc tiếng Anh cùng âm Hán Việt (银行 → *ngân hàng* · NGÂN HÀNG). Rê chuột vào chữ để xem nghĩa của cả từ.
 - **Dấu thanh hoặc số** (`nǐ hǎo` / `ni3 hao3`), có tô màu thanh điệu và chỉnh được cỡ chữ.
 - **8 mẫu giao diện popup**: Đêm, Trắng tinh, Sữa dâu, Mèo mướp, Trà xanh, Hoa anh đào, Biển xanh, Ngân hà.
 - **Popup không chiếm focus**: vẫn gõ chat bình thường. Click ra ngoài hoặc bấm Esc để đóng.
@@ -80,3 +81,5 @@ Rất hoan nghênh issue và pull request. Xem [CONTRIBUTING.md](CONTRIBUTING.md
 ## Giấy phép
 
 [MIT](LICENSE). Chuyển pinyin bằng thư viện [ToolGood.Words.Pinyin](https://github.com/toolgood/ToolGood.Words).
+
+Dữ liệu từ điển trong `data/` (giấy phép CC BY-SA 4.0): nghĩa tiếng Việt từ [CVDICT](https://github.com/ph0ngp/CVDICT), nghĩa tiếng Anh từ [CC-CEDICT](https://www.mdbg.net/chinese/dictionary?page=cedict), âm Hán Việt từ [Unihan](https://www.unicode.org/charts/unihan.html). Xem [data/README.md](data/README.md).

@@ -87,7 +87,7 @@ namespace genpiyi
             }) { IsBackground = true };
             listener.Start();
 
-            Task.Run(PinyinService.Warmup);
+            Task.Run(() => { DictionaryService.Warmup(); PinyinService.Warmup(); });
 
             bool startedHidden = e.Args.Any(a => a.Equals("--tray", StringComparison.OrdinalIgnoreCase));
             if (startedHidden)

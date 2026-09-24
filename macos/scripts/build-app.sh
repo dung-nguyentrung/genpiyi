@@ -30,6 +30,14 @@ sed -e "s/__VERSION__/$VERSION/g" -e "s/__BUNDLE_ID__/$BUNDLE_ID/g" \
     "$ROOT/Resources/Info.plist" > "$APP/Contents/Info.plist"
 printf 'APPL????' > "$APP/Contents/PkgInfo"
 
+# Từ điển offline (tạo bằng: python3 tools/build_dict.py)
+DICT="$ROOT/../data/genpiyi-dict.tsv.deflate"
+if [ -f "$DICT" ]; then
+  cp "$DICT" "$APP/Contents/Resources/"
+else
+  echo "   (chưa có data/genpiyi-dict.tsv.deflate — app sẽ không có phần nghĩa từ vựng)"
+fi
+
 # Biểu tượng app từ assets/logo.png
 LOGO="$ROOT/../assets/logo.png"
 if [ -f "$LOGO" ]; then

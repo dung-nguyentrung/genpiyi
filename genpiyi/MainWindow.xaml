@@ -147,6 +147,14 @@
                                 </Border>
                             </StackPanel>
                         </Border>
+
+                        <!-- Từ vựng + nghĩa của đoạn đang tra -->
+                        <Border x:Name="VocabCard" Style="{StaticResource Card}" Margin="0,12,0,0" Visibility="Collapsed">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource S.try.vocab}" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                <ContentControl x:Name="VocabPreviewHost"/>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </ScrollViewer>
 
@@ -303,6 +311,48 @@
                                     <StackPanel x:Name="ToneLegend" Orientation="Horizontal" Margin="0,5,0,0"/>
                                 </StackPanel>
                             </DockPanel>
+                        </Border>
+
+                        <!-- Nghĩa từ vựng -->
+                        <Border Style="{StaticResource SettingRow}">
+                            <StackPanel>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Style="{StaticResource RowIcon}" Text="&#xE82D;"/>
+                                    <CheckBox x:Name="ChkVocab" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                                              Checked="Setting_Changed" Unchecked="Setting_Changed"/>
+                                    <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.vocab}"/>
+                                        <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.vocabDesc}"/>
+                                    </StackPanel>
+                                </DockPanel>
+                                <StackPanel x:Name="DictOptions" Margin="36,14,0,0">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Right" Style="{StaticResource SegmentHost}" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal">
+                                                <RadioButton x:Name="RbMeanVi" GroupName="MeaningLang" Style="{StaticResource SegmentButton}"
+                                                             Content="{DynamicResource S.set.meanVi}" Checked="Setting_Changed"/>
+                                                <RadioButton x:Name="RbMeanEn" GroupName="MeaningLang" Style="{StaticResource SegmentButton}"
+                                                             Content="{DynamicResource S.set.meanEn}" Checked="Setting_Changed"/>
+                                                <RadioButton x:Name="RbMeanBoth" GroupName="MeaningLang" Style="{StaticResource SegmentButton}"
+                                                             Content="{DynamicResource S.set.meanBoth}" Checked="Setting_Changed"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                            <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.meaningLang}"/>
+                                            <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.meaningLangDesc}"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                    <DockPanel Margin="0,14,0,0">
+                                        <CheckBox x:Name="ChkHanViet" DockPanel.Dock="Right" Style="{StaticResource ToggleSwitch}"
+                                                  Checked="Setting_Changed" Unchecked="Setting_Changed"/>
+                                        <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                            <TextBlock Style="{StaticResource RowTitle}" Text="{DynamicResource S.set.hanviet}"/>
+                                            <TextBlock Style="{StaticResource RowDesc}" Text="{DynamicResource S.set.hanvietDesc}"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </StackPanel>
+                                <TextBlock x:Name="DictStatus" Style="{StaticResource RowDesc}" Margin="36,12,0,0" TextWrapping="Wrap"/>
+                            </StackPanel>
                         </Border>
 
                         <!-- Giao diện popup -->

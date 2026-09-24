@@ -128,8 +128,8 @@ final class Loc: ObservableObject {
         "guide.s2Desc": ("Dùng được ở mọi ứng dụng: Safari, Pages, PDF… (cần quyền Trợ năng). Nếu không bôi đen gì, app lấy nội dung đang có trong clipboard.",
                          "Works in any app: Safari, Pages, PDF… (needs Accessibility permission). If nothing is selected, the app uses what's already on the clipboard."),
         "guide.s3": ("Trong popup", "In the popup"),
-        "guide.s3Desc": ("Rê chuột vào chữ để xem cách đọc (chữ có gạch chấm là chữ đa âm). Nút copy pinyin / copy cả chữ Hán + pinyin, nút ghim để giữ popup. Click ra ngoài hoặc Esc để đóng — popup không chiếm focus nên vẫn gõ chat bình thường.",
-                         "Hover a character to see its readings (a dotted underline marks characters with several readings). Buttons copy the pinyin or hanzi + pinyin; the pin keeps the popup open. Click outside or press Esc to close — the popup never steals focus, so you can keep typing."),
+        "guide.s3Desc": ("Rê chuột vào chữ để xem cách đọc (chữ có gạch chấm là chữ đa âm). Nút sách mở danh sách từ kèm nghĩa; nút copy pinyin / copy cả chữ Hán + pinyin; nút ghim để giữ popup. Click ra ngoài hoặc Esc để đóng — popup không chiếm focus nên vẫn gõ chat bình thường.",
+                         "Hover a character to see its readings (a dotted underline marks characters with several readings). The book button lists each word with its meaning; other buttons copy the pinyin or hanzi + pinyin; the pin keeps the popup open. Click outside or press Esc to close — the popup never steals focus, so you can keep typing."),
         "guide.tray": ("Đóng cửa sổ này app vẫn chạy nền trên thanh menu (biểu tượng 拼 ở góc trên bên phải màn hình). Muốn tắt hẳn: bấm biểu tượng → Thoát.",
                        "Closing this window keeps the app running in the menu bar (the 拼 icon at the top-right of the screen). To quit: click the icon → Quit."),
 
@@ -138,6 +138,26 @@ final class Loc: ObservableObject {
         "popup.pin": ("Ghim popup", "Pin popup"),
         "popup.unpin": ("Bỏ ghim", "Unpin"),
         "popup.close": ("Đóng (Esc)", "Close (Esc)"),
+        "popup.vocab": ("Xem từ vựng & nghĩa", "Show vocabulary & meanings"),
+        "popup.vocabHide": ("Ẩn từ vựng", "Hide vocabulary"),
+
+        // Từ điển
+        "dict.hv": ("Hán Việt: ", "Sino-Vietnamese: "),
+        "set.vocab": ("Hiện nghĩa từ vựng", "Show word meanings"),
+        "set.vocabDesc": ("Popup có thêm danh sách từ kèm nghĩa (bật/tắt nhanh bằng nút sách). Rê chuột hoặc bấm vào chữ để xem nghĩa của cả từ.",
+                          "The popup lists each word with its meaning (toggle with the book button). Hover or click a character to see the meaning of the whole word."),
+        "set.meaningLang": ("Ngôn ngữ của nghĩa", "Meaning language"),
+        "set.meaningLangDesc": ("Nghĩa tiếng Việt từ CVDICT, tiếng Anh từ CC-CEDICT.", "Vietnamese meanings from CVDICT, English from CC-CEDICT."),
+        "set.meanVi": ("Tiếng Việt", "Vietnamese"),
+        "set.meanEn": ("English", "English"),
+        "set.meanBoth": ("Cả hai", "Both"),
+        "set.hanviet": ("Hiện âm Hán Việt", "Show Sino-Vietnamese readings"),
+        "set.hanvietDesc": ("Ví dụ 银行 → NGÂN HÀNG.", "e.g. 银行 → NGÂN HÀNG (the Vietnamese reading of the characters)."),
+        "set.dictMissing": ("Bản build này chưa có dữ liệu từ điển. Chạy python3 tools/build_dict.py rồi build lại.",
+                            "This build has no dictionary data. Run python3 tools/build_dict.py and rebuild."),
+        "set.dictCredit": ("Dữ liệu: CVDICT, CC-CEDICT (CC BY-SA 4.0) · Unihan (Unicode). %ld mục từ.",
+                           "Data: CVDICT, CC-CEDICT (CC BY-SA 4.0) · Unihan (Unicode). %ld entries."),
+        "try.vocab": ("Từ vựng", "Vocabulary"),
 
         // Thanh menu
         "tray.open": ("Mở GenPiYi", "Open GenPiYi"),

@@ -64,7 +64,7 @@ final class AppController: NSObject, ObservableObject, NSApplicationDelegate, NS
         clipTimer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in self?.pollClipboard() }
         RunLoop.main.add(clipTimer!, forMode: .common)
 
-        DispatchQueue.global(qos: .utility).async { PinyinService.warmup() }
+        DispatchQueue.global(qos: .utility).async { DictionaryService.warmup(); PinyinService.warmup() }
 
         // Mở cùng macOS → chạy ẩn trên thanh menu; mở bằng tay → hiện cửa sổ
         let launchedAtLogin = AppSettings.startAtLogin && ProcessInfo.processInfo.systemUptime < 180

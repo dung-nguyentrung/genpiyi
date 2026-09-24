@@ -39,6 +39,18 @@ namespace genpiyi
             _plain = PinyinService.ToPlainPinyin(lines);
             PlainPinyin.Text = _plain;
 
+            // Từ vựng kèm nghĩa (nếu bản build có từ điển)
+            if (DictionaryService.Available)
+            {
+                var vocab = DictionaryService.Vocabulary(lines, s.ToneStyle);
+                if (vocab.Count > 0)
+                {
+                    VocabHost.Content = RubyBuilder.BuildVocab(vocab, s, 510, _theme);
+                    BtnVocab.Visibility = Visibility.Visible;
+                    SetVocabVisible(s.ShowVocab);
+                }
+            }
+
             if (!string.IsNullOrEmpty(source))
             {
                 SourceLabel.Text = source;
@@ -172,6 +184,23 @@ namespace genpiyi
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e) => Close();
+
+        private void BtnVocab_Click(object sender, RoutedEventArgs e)
+        {
+            bool show = VocabBorder.Visibility != Visibility.Visible;
+            SetVocabVisible(show);
+            // Nhớ lựa chọn cho các lần sau
+            var s = App.Current.Settings;
+            if (s.ShowVocab != show) { s.ShowVocab = show; App.Current.SettingsChanged(); }
+        }
+
+        private void SetVocabVisible(bool show)
+        {
+            VocabBorder.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+            if (show) BtnVocab.Foreground = ThemeCatalog.B(_theme.Accent);
+            else BtnVocab.ClearValue(ForegroundProperty);
+            BtnVocab.ToolTip = Loc.T(show ? "popup.vocabHide" : "popup.vocab");
+        }
 
         /// <summary>Đổi icon thành dấu ✓ xanh trong giây lát để báo đã copy.</summary>
         private static void Flash(Button btn, string originalGlyph)
