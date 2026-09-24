@@ -23,13 +23,33 @@ Bản macOS của GenPiYi — app nhỏ nằm trên **thanh menu** (biểu tư�
 
 ## Cài đặt
 
-1. Tải `GenPiYi-v….-macos.dmg` ở mục [Releases](https://github.com/dung-nguyentrung/genpiyi/releases) (tag `mac-v…`) hoặc ở mục *Artifacts* của lần build gần nhất trong tab **Actions → macOS**.
+### Cách 1 — Một dòng lệnh (khuyên dùng, không bị cảnh báo)
+
+Mở **Terminal** (⌘ + Space, gõ `Terminal`), dán dòng dưới rồi bấm Enter:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/dung-nguyentrung/genpiyi/main/macos/install.sh | bash
+```
+
+Lệnh sẽ tải bản mới nhất, chép vào **Applications** và mở app (biểu tượng 拼 trên thanh menu). Chạy lại lệnh này bất cứ lúc nào để **cập nhật**. Xem nội dung script tại [`install.sh`](install.sh).
+
+### Cách 2 — Tải file .dmg
+
+1. Tải `GenPiYi-v…-macos.dmg` ở mục [Releases](https://github.com/dung-nguyentrung/genpiyi/releases) (tag `mac-v…`).
 2. Mở file .dmg, kéo **GenPiYi** vào **Applications**.
-3. Lần đầu mở, macOS có thể chặn vì app chưa được Apple công chứng. Vào **Cài đặt hệ thống → Quyền riêng tư & Bảo mật**, kéo xuống và bấm **Vẫn mở**. Hoặc chạy trong Terminal:
-   ```bash
-   xattr -dr com.apple.quarantine /Applications/GenPiYi.app
-   ```
-4. (Tuỳ chọn) Để **phím tắt** tự copy đoạn đang bôi đen, cho phép GenPiYi trong **Quyền riêng tư & Bảo mật → Trợ năng**. Tính năng tự hiện khi copy **không cần** quyền này.
+3. Mở GenPiYi. macOS sẽ báo *“Apple không thể xác minh GenPiYi không có phần mềm độc hại”* — bấm **Xong** (đừng bấm *Chuyển vào Thùng rác*).
+   Cảnh báo này xuất hiện vì app miễn phí nên không đăng ký công chứng với Apple (99 USD/năm), không phải vì có virus — toàn bộ mã nguồn nằm trong repo này.
+4. Vào **Cài đặt hệ thống → Quyền riêng tư & Bảo mật**, kéo xuống cuối, bấm **Vẫn mở** rồi nhập mật khẩu máy. Chỉ cần làm một lần.
+
+   ![Cài đặt hệ thống → Quyền riêng tư & Bảo mật → Vẫn mở](../docs/img/macos-open-anyway.svg)
+
+   > Trên macOS 15 Sequoia trở lên, cách cũ *chuột phải → Mở* không còn dùng được, phải làm theo bước này.
+   >
+   > Hoặc chạy trong Terminal: `xattr -dr com.apple.quarantine /Applications/GenPiYi.app`
+
+### Sau khi cài
+
+(Tuỳ chọn) Để **phím tắt** tự copy đoạn đang bôi đen, cho phép GenPiYi trong **Quyền riêng tư & Bảo mật → Trợ năng**. Tính năng tự hiện khi copy **không cần** quyền này.
 
 Yêu cầu: macOS 13 Ventura trở lên, chip Apple hoặc Intel.
 
@@ -66,6 +86,14 @@ Mở bằng Xcode: `open Package.swift`.
 
 GenPiYi for macOS lives in the **menu bar** (拼 icon). Right-click a Chinese message in Zalo / WeChat / LINE… → **Copy** (or select it and press ⌘C) and a popup shows **pinyin above every character** next to your cursor. Select text anywhere and press **⌃⌥P** to do the same in any app.
 
-**Install:** download `GenPiYi-v…-macos.dmg` from Releases (tags `mac-v…`) or from the latest **Actions → macOS** run, drag GenPiYi to Applications. If macOS blocks the first launch (the app isn't notarized), go to **System Settings → Privacy & Security → Open Anyway**, or run `xattr -dr com.apple.quarantine /Applications/GenPiYi.app`. For the hotkey to copy the selected text, allow GenPiYi under **Privacy & Security → Accessibility**.
+**Install (recommended, no warning):** open Terminal and run
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/dung-nguyentrung/genpiyi/main/macos/install.sh | bash
+```
+
+It downloads the latest release, copies it to Applications and opens it; run it again to update. Files fetched with `curl` aren't quarantined, so Gatekeeper doesn't block them.
+
+**Install from .dmg:** download `GenPiYi-v…-macos.dmg` from Releases (tags `mac-v…`) and drag GenPiYi to Applications. On first launch macOS says it *“can't verify GenPiYi is free of malware”* — the app is free and not notarized by Apple (that costs $99/year), the full source is in this repo. Click **Done**, then go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway** (on macOS 15+ right-click → Open no longer works). Or run `xattr -dr com.apple.quarantine /Applications/GenPiYi.app`. For the hotkey to copy the selected text, allow GenPiYi under **Privacy & Security → Accessibility**.
 
 **Build:** `cd macos && ./scripts/build-app.sh` (Xcode 15+, macOS 13+ target).

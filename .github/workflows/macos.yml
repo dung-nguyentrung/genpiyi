@@ -50,11 +50,21 @@ jobs:
           body: |
             ## ⬇️ GenPiYi cho macOS / for macOS
 
-            Tải **`GenPiYi-….dmg`**, mở ra và kéo **GenPiYi** vào **Applications**. Cần macOS 13 Ventura trở lên (chip Apple & Intel).
-            Download **`GenPiYi-….dmg`**, open it and drag **GenPiYi** into **Applications**. Requires macOS 13 Ventura or later (Apple silicon & Intel).
+            Cần macOS 13 Ventura trở lên (chip Apple & Intel). / Requires macOS 13 Ventura or later (Apple silicon & Intel).
 
-            > **Lần đầu mở bị chặn?** App chưa được Apple công chứng (notarize). Vào **Cài đặt hệ thống → Quyền riêng tư & Bảo mật → Vẫn mở**, hoặc chạy:
-            > **Blocked on first launch?** The app isn't notarized yet. Go to **System Settings → Privacy & Security → Open Anyway**, or run:
-            > ```
-            > xattr -dr com.apple.quarantine /Applications/GenPiYi.app
-            > ```
+            ### Cách 1 — Một dòng lệnh (khuyên dùng) / One-line install (recommended)
+            Mở **Terminal**, dán dòng dưới rồi bấm Enter. Không bị macOS cảnh báo, chạy lại để cập nhật.
+            Open **Terminal** and paste this. No Gatekeeper warning; run it again to update.
+            ```
+            curl -fsSL https://raw.githubusercontent.com/dung-nguyentrung/genpiyi/main/macos/install.sh | bash
+            ```
+
+            ### Cách 2 — File .dmg / .dmg file
+            Tải **`GenPiYi-….dmg`** bên dưới, mở ra và kéo **GenPiYi** vào **Applications**.
+            Download **`GenPiYi-….dmg`** below, open it and drag **GenPiYi** into **Applications**.
+
+            > **Bị báo “không thể xác minh không có phần mềm độc hại”?** App miễn phí nên chưa được Apple công chứng (notarize), không phải virus — mã nguồn mở hoàn toàn tại repo này. Bấm **Xong**, rồi vào **Cài đặt hệ thống → Quyền riêng tư & Bảo mật**, kéo xuống cuối, bấm **Vẫn mở**. Chỉ cần làm một lần.
+            >
+            > **“Can't verify it's free of malware”?** The app is free and not notarized by Apple — the full source is in this repo. Click **Done**, then go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway**. You only need to do this once.
+            >
+            > ![Open Anyway](https://raw.githubusercontent.com/dung-nguyentrung/genpiyi/main/docs/img/macos-open-anyway.svg)

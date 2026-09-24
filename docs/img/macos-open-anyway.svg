@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" width="760" height="360" font-family="-apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Cài đặt hệ thống → Quyền riêng tư &amp; Bảo mật → Vẫn mở</title>
+  <!-- cửa sổ -->
+  <rect x="0.5" y="0.5" width="759" height="359" rx="12" fill="#FFFFFF" stroke="#D5D5D8"/>
+  <path d="M12.5 0.5h240v359h-240a12 12 0 0 1-12-12v-335a12 12 0 0 1 12-12z" fill="#F2F2F4"/>
+  <line x1="252.5" y1="0.5" x2="252.5" y2="359.5" stroke="#DCDCE0"/>
+  <circle cx="22" cy="22" r="6" fill="#FF5F57"/><circle cx="42" cy="22" r="6" fill="#FEBC2E"/><circle cx="62" cy="22" r="6" fill="#28C840"/>
+  <!-- thanh bên -->
+  <rect x="16" y="46" width="222" height="26" rx="7" fill="#E3E3E7"/>
+  <text x="28" y="64" font-size="13" fill="#8A8A90">Tìm kiếm</text>
+  <g font-size="13" fill="#1D1D1F">
+    <rect x="28" y="92" width="18" height="18" rx="5" fill="#8E8E93"/><text x="56" y="106">Cài đặt chung</text>
+    <rect x="28" y="124" width="18" height="18" rx="5" fill="#34C759"/><text x="56" y="138">Trợ năng</text>
+    <rect x="28" y="156" width="18" height="18" rx="5" fill="#AF52DE"/><text x="56" y="170">Màn hình</text>
+    <rect x="16" y="182" width="222" height="30" rx="7" fill="#0A84FF"/>
+    <circle cx="37" cy="197" r="11" fill="#D63A2F" stroke="#FFFFFF" stroke-width="2"/><text x="37" y="202" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="700">1</text>
+    <text x="56" y="202" fill="#FFFFFF" font-weight="600">Quyền riêng tư &amp; Bảo mật</text>
+    <rect x="28" y="222" width="18" height="18" rx="5" fill="#FF9500"/><text x="56" y="236">Thông báo</text>
+    <rect x="28" y="254" width="18" height="18" rx="5" fill="#5856D6"/><text x="56" y="268">Mật khẩu</text>
+  </g>
+  <!-- nội dung -->
+  <text x="274" y="56" font-size="20" font-weight="700" fill="#1D1D1F">Quyền riêng tư &amp; Bảo mật</text>
+  <text x="274" y="86" font-size="12" fill="#8A8A90">↓ kéo xuống cuối trang</text>
+  <text x="274" y="124" font-size="15" font-weight="600" fill="#1D1D1F">Bảo mật</text>
+  <rect x="274" y="136" width="466" height="164" rx="10" fill="#F6F6F8" stroke="#E4E4E8"/>
+  <text x="290" y="162" font-size="13" fill="#1D1D1F">Cho phép ứng dụng từ</text>
+  <text x="722" y="162" font-size="13" fill="#6E6E73" text-anchor="end">App Store &amp; nhà phát triển đã biết ⌄</text>
+  <line x1="290" y1="178" x2="722" y2="178" stroke="#E4E4E8"/>
+  <text x="290" y="206" font-size="13" fill="#1D1D1F">“GenPiYi” đã bị chặn để bảo vệ máy Mac của bạn.</text>
+  <rect x="624" y="226" width="94" height="30" rx="7" fill="#FFFFFF" stroke="#C7C7CC"/>
+  <text x="671" y="246" font-size="13" fill="#1D1D1F" text-anchor="middle" font-weight="600">Vẫn mở</text>
+  <!-- đánh dấu -->
+  <rect x="616" y="219" width="110" height="44" rx="12" fill="none" stroke="#D63A2F" stroke-width="3"/>
+  <circle cx="600" cy="241" r="13" fill="#D63A2F"/>
+  <text x="600" y="246" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="700">2</text>
+  <text x="290" y="286" font-size="12" fill="#8A8A90">Bấm “Vẫn mở” rồi nhập mật khẩu máy — chỉ cần làm một lần.</text>
+  <text x="274" y="336" font-size="12" fill="#8A8A90">System Settings → Privacy &amp; Security → Open Anyway</text>
+</svg>

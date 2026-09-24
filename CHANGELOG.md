@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/), versions follow [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- macOS: one-line installer `macos/install.sh` (`curl -fsSL …/macos/install.sh | bash`) — downloads the latest `mac-v…` release into Applications without the Gatekeeper "can't verify it's free of malware" warning; re-run to update.
+- Clearer "Open Anyway" instructions with an illustration (`docs/img/macos-open-anyway.svg`) in the macOS README, release notes and website.
+
 ## [0.0.4] - 2026-09-24 (Windows) · mac-v0.1.2 (macOS)
 
 ### Fixed
