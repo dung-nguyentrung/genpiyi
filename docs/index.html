@@ -6,7 +6,7 @@
 <title>GenPiYi – Xem pinyin tin nhắn tiếng Trung</title>
 <meta name="description" content="GenPiYi: copy tin nhắn tiếng Trung trong Zalo, WeChat, LINE… là thấy pinyin ngay cạnh con trỏ chuột. Miễn phí, mã nguồn mở, chạy offline.">
 <meta property="og:title" content="GenPiYi – Pinyin cho tin nhắn tiếng Trung">
-<meta property="og:description" content="Copy tin nhắn tiếng Trung là thấy pinyin ngay. Miễn phí, mã nguồn mở, cho Windows.">
+<meta property="og:description" content="Copy tin nhắn tiếng Trung là thấy pinyin ngay. Miễn phí, mã nguồn mở, cho Windows và macOS.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FF6B6B'/%3E%3Cstop offset='1' stop-color='%23D6363C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='15' fill='url(%23g)'/%3E%3Ctext x='32' y='45' font-size='38' font-weight='700' text-anchor='middle' fill='white' font-family='Microsoft YaHei,PingFang SC,sans-serif'%3E拼%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -183,6 +183,16 @@
   .dl .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.25); }
   .dl .note { margin-top: 22px; font-size: 13.5px; color: #9AA3B2; }
   .dl .ver { font-size: 13px; color: #FFB3B5; margin-bottom: 8px; min-height: 1.4em; }
+  .platforms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+  @media (max-width: 680px) { .platforms { grid-template-columns: 1fr; } }
+  .plat { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 24px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .plat.suggest { border-color: rgba(255,107,107,.7); box-shadow: 0 0 0 3px rgba(229,72,77,.18); }
+  .plat-name { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; }
+  .plat-name svg { width: 24px; height: 24px; }
+  .plat-req { font-size: 13.5px; color: #C9CED8; }
+  .plat .btn { width: 100%; justify-content: center; margin-top: 6px; }
+  .plat-alt { font-size: 13.5px; color: #FFB3B5; }
+  .plat .note { margin-top: 6px; font-size: 12.5px; }
 
   /* FAQ */
   .faq { max-width: 780px; margin: 0 auto; }
@@ -227,18 +237,21 @@
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <span class="pill" data-i="hero.pill">✨ Miễn phí · Mã nguồn mở · Windows</span>
+      <span class="pill" data-i="hero.pill">✨ Miễn phí · Mã nguồn mở · Windows &amp; macOS</span>
       <h1 data-i-html="hero.title">Đọc được mọi tin nhắn <span class="grad">tiếng Trung</span> — chỉ cần copy</h1>
       <p class="lead" data-i="hero.lead">Chuột phải vào tin nhắn trong Zalo, WeChat, LINE… chọn Sao chép, pinyin hiện ngay cạnh con trỏ chuột — có dấu thanh, tô màu, đọc đúng chữ đa âm.</p>
       <div class="cta">
-        <a class="btn btn-primary dl-link" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16"/></svg>
+        <a class="btn btn-primary dl-win" id="heroWin" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.5 4.5v7H3zM11.5 4.3 21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg>
           <span><span data-i="cta.download">Tải cho Windows</span><small class="dl-size" data-i="cta.free">Miễn phí · không cần quyền admin</small></span>
         </a>
-        <a class="btn btn-ghost" href="#how" data-i="cta.how">Xem cách dùng</a>
+        <a class="btn btn-ghost dl-mac" id="heroMac" href="https://github.com/dung-nguyentrung/genpiyi/releases">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg>
+          <span><span data-i="cta.mac">Tải cho macOS</span><small class="dl-mac-size" data-i="cta.macSub">macOS 13+ · chip Apple &amp; Intel</small></span>
+        </a>
       </div>
       <div class="meta">
-        <span data-i="meta.1">Chạy offline</span><span data-i="meta.2">Không quảng cáo</span><span data-i="meta.3">Windows 10 / 11</span>
+        <span data-i="meta.1">Chạy offline</span><span data-i="meta.2">Không quảng cáo</span><span data-i="meta.3">Windows 10 / 11</span><span data-i="meta.4">macOS 13+</span>
       </div>
     </div>
 
@@ -270,12 +283,12 @@
     <div class="sec-head reveal">
       <div class="kicker" data-i="f.kicker">Tính năng</div>
       <h2 data-i="f.title">Gọn nhẹ, đúng việc, không làm phiền</h2>
-      <p data-i="f.sub">GenPiYi nằm yên ở khay hệ thống và chỉ xuất hiện khi bạn cần.</p>
+      <p data-i="f.sub">GenPiYi nằm yên ở khay hệ thống (Windows) hoặc thanh menu (macOS) và chỉ xuất hiện khi bạn cần.</p>
     </div>
     <div class="grid">
       <div class="card reveal"><div class="ico">📋</div><h3 data-i="f1.t">Copy là thấy pinyin</h3><p data-i="f1.d">Chuột phải → Sao chép trong app chat, popup hiện ngay cạnh con trỏ. Không cần mở thêm cửa sổ nào.</p></div>
       <div class="card reveal"><div class="ico">💬</div><h3 data-i="f2.t">Hỗ trợ nhiều app chat</h3><p data-i="f2.d">Zalo, WeChat, WeCom, LINE, Telegram, QQ, DingTalk, Feishu, WhatsApp, Messenger, Discord… tự quét và bật/tắt từng app.</p></div>
-      <div class="card reveal"><div class="ico">⌨️</div><h3 data-i="f3.t">Phím tắt ở mọi nơi</h3><p data-i-html="f3.d">Bôi đen chữ trong trình duyệt, Word, PDF… rồi bấm <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>P</kbd>.</p></div>
+      <div class="card reveal"><div class="ico">⌨️</div><h3 data-i="f3.t">Phím tắt ở mọi nơi</h3><p data-i-html="f3.d">Bôi đen chữ trong trình duyệt, Word, PDF… rồi bấm <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>P</kbd> (trên Mac: <kbd>⌃</kbd>+<kbd>⌥</kbd>+<kbd>P</kbd>).</p></div>
       <div class="card reveal"><div class="ico">🎯</div><h3 data-i="f4.t">Đọc đúng chữ đa âm</h3><p data-i-html="f4.d">Hiểu theo ngữ cảnh: <span class="hz">银行</span> yínháng, <span class="hz">行走</span> xíngzǒu. Rê chuột để xem các cách đọc khác.</p></div>
       <div class="card reveal"><div class="ico">🎨</div><h3 data-i="f5.t">Tô màu theo thanh điệu</h3><p data-i="f5.d">Mỗi thanh một màu, dễ nhớ khi học. Chọn dấu thanh (nǐ hǎo) hoặc số (ni3 hao3).</p></div>
       <div class="card reveal"><div class="ico">🔒</div><h3 data-i="f6.t">Riêng tư, chạy offline</h3><p data-i="f6.d">Không cần tài khoản, không gửi dữ liệu đi đâu. Mã nguồn mở hoàn toàn trên GitHub.</p></div>
@@ -291,8 +304,8 @@
       <h2 data-i="h.title">3 bước, chưa tới 1 phút</h2>
     </div>
     <div class="steps">
-      <div class="step reveal"><h3 data-i="s1.t">Tải và cài đặt</h3><p data-i="s1.d">Tải GenPiYi-Setup.exe, mở ra và bấm Install. Không cần quyền quản trị, không cần cài thêm gì.</p></div>
-      <div class="step reveal"><h3 data-i="s2.t">Chuột phải → Sao chép</h3><p data-i="s2.d">Trong Zalo, WeChat, LINE… chuột phải vào tin nhắn tiếng Trung và chọn Sao chép / Copy / 复制.</p></div>
+      <div class="step reveal"><h3 data-i="s1.t">Tải và cài đặt</h3><p data-i="s1.d">Windows: tải GenPiYi-Setup.exe, mở ra và bấm Install. macOS: tải file .dmg, kéo GenPiYi vào Applications. Không cần cài thêm gì.</p></div>
+      <div class="step reveal"><h3 data-i="s2.t">Chuột phải → Sao chép</h3><p data-i="s2.d">Trong Zalo, WeChat, LINE… chuột phải vào tin nhắn tiếng Trung và chọn Sao chép / Copy / 复制 (trên Mac có thể bôi đen rồi ⌘C).</p></div>
       <div class="step reveal"><h3 data-i="s3.t">Đọc pinyin</h3><p data-i="s3.d">Popup hiện ngay cạnh chuột. Bấm copy pinyin, ghim popup, hoặc click ra ngoài để đóng — vẫn gõ chat bình thường.</p></div>
     </div>
   </div>
@@ -319,15 +332,23 @@
     <div class="dl reveal">
       <div class="ver" id="ver"></div>
       <h2 data-i="d.title">Sẵn sàng thử chưa?</h2>
-      <p data-i="d.sub">Miễn phí mãi mãi. Tải bộ cài, bấm Install, rồi copy một tin nhắn tiếng Trung bất kỳ.</p>
-      <div class="cta">
-        <a class="btn btn-primary dl-link" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16"/></svg>
-          <span data-i="cta.download2">Tải bộ cài đặt (.exe)</span>
-        </a>
-        <a class="btn btn-ghost" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest" data-i="cta.other">Bản chạy ngay / ARM64</a>
+      <p data-i="d.sub">Miễn phí mãi mãi. Tải về, cài đặt, rồi copy một tin nhắn tiếng Trung bất kỳ.</p>
+      <div class="platforms">
+        <div class="plat">
+          <div class="plat-name"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.5 4.5v7H3zM11.5 4.3 21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg><span>Windows</span></div>
+          <div class="plat-req" data-i="d.winReq">Windows 10 / 11 · x64 &amp; ARM64</div>
+          <a class="btn btn-primary dl-win" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest"><span data-i="cta.download2">Tải bộ cài đặt (.exe)</span></a>
+          <a class="plat-alt" href="https://github.com/dung-nguyentrung/genpiyi/releases/latest" data-i="cta.other">Bản chạy ngay / ARM64</a>
+          <div class="note" data-i-html="d.note">Hiện “Windows protected your PC”? Bấm <b>More info → Run anyway</b>. App chưa mua chữ ký số, không phải virus.</div>
+        </div>
+        <div class="plat">
+          <div class="plat-name"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span>macOS</span></div>
+          <div class="plat-req" data-i="d.macReq">macOS 13 Ventura trở lên · chip Apple &amp; Intel</div>
+          <a class="btn btn-primary dl-mac" href="https://github.com/dung-nguyentrung/genpiyi/releases"><span data-i="cta.dmg">Tải cho Mac (.dmg)</span></a>
+          <a class="plat-alt dl-mac-zip" href="https://github.com/dung-nguyentrung/genpiyi/releases" data-i="cta.zip">Bản nén .zip</a>
+          <div class="note" data-i-html="d.macNote">Mac báo không mở được? Vào <b>Cài đặt hệ thống → Quyền riêng tư &amp; Bảo mật → Vẫn mở</b>. App chưa được Apple công chứng, không phải virus.</div>
+        </div>
       </div>
-      <div class="note" data-i-html="d.note">Windows hiện “Windows protected your PC”? Bấm <b>More info → Run anyway</b>. App chưa mua chữ ký số, không phải virus.</div>
     </div>
   </div>
 </section>
@@ -340,9 +361,10 @@
       <details class="reveal"><summary data-i="q1.q">GenPiYi có miễn phí không?</summary><p data-i="q1.a">Có, miễn phí hoàn toàn và là mã nguồn mở (giấy phép MIT). Không quảng cáo, không bản trả phí.</p></details>
       <details class="reveal"><summary data-i="q2.q">Vì sao Windows cảnh báo khi mở file cài?</summary><p data-i="q2.a">Windows SmartScreen cảnh báo mọi phần mềm chưa có chữ ký số trả phí. Bấm “More info” → “Run anyway” để tiếp tục. Toàn bộ mã nguồn công khai trên GitHub để bạn kiểm tra.</p></details>
       <details class="reveal"><summary data-i="q3.q">App có đọc trộm tin nhắn của tôi không?</summary><p data-i="q3.a">Không. GenPiYi chỉ đọc đoạn chữ bạn vừa sao chép để hiện pinyin, xử lý ngay trên máy và không lưu, không gửi đi đâu. App không kết nối Internet.</p></details>
-      <details class="reveal"><summary data-i="q4.q">App chat của tôi không có trong danh sách?</summary><p data-i="q4.a">Mở app chat đó, vào Cài đặt của GenPiYi → “Thêm app khác đang mở” và bấm Thêm. Hoặc dùng phím tắt Ctrl+Alt+P — chạy được ở mọi ứng dụng.</p></details>
-      <details class="reveal"><summary data-i="q5.q">Có bản cho macOS hoặc điện thoại không?</summary><p data-i="q5.a">Hiện tại chỉ có Windows 10/11. Nếu bạn muốn đóng góp bản cho nền tảng khác, hãy ghé GitHub!</p></details>
-      <details class="reveal"><summary data-i="q6.q">Gỡ cài đặt thế nào?</summary><p data-i="q6.a">Vào Settings → Apps → Installed apps, tìm GenPiYi và bấm Uninstall — như mọi phần mềm khác.</p></details>
+      <details class="reveal"><summary data-i="q4.q">App chat của tôi không có trong danh sách?</summary><p data-i="q4.a">Mở app chat đó, vào Cài đặt của GenPiYi → “Thêm app khác đang mở” và bấm Thêm. Hoặc dùng phím tắt Ctrl+Alt+P (Mac: ⌃⌥P) — chạy được ở mọi ứng dụng.</p></details>
+      <details class="reveal"><summary data-i="q7.q">Mac báo “không thể mở GenPiYi” lần đầu?</summary><p data-i-html="q7.a">App chưa được Apple công chứng (notarize) nên macOS chặn lần đầu. Vào <b>Cài đặt hệ thống → Quyền riêng tư &amp; Bảo mật</b>, kéo xuống và bấm <b>Vẫn mở</b>. Để phím tắt tự copy đoạn đang bôi đen, cho phép GenPiYi ở mục <b>Trợ năng</b> (Accessibility) trong cùng trang đó.</p></details>
+      <details class="reveal"><summary data-i="q5.q">Có bản cho macOS hoặc điện thoại không?</summary><p data-i="q5.a">Đã có bản macOS (macOS 13 trở lên, chip Apple và Intel) — nằm trên thanh menu, dùng y như bản Windows. Bản điện thoại chưa có; nếu bạn muốn đóng góp, hãy ghé GitHub!</p></details>
+      <details class="reveal"><summary data-i="q6.q">Gỡ cài đặt thế nào?</summary><p data-i="q6.a">Windows: Settings → Apps → Installed apps, tìm GenPiYi và bấm Uninstall. macOS: bấm biểu tượng 拼 trên thanh menu → Thoát, rồi kéo GenPiYi từ Applications vào Thùng rác.</p></details>
     </div>
   </div>
 </section>
@@ -392,34 +414,39 @@ function popupHTML(theme, source) {
 const I18N = {
   en: {
     "nav.features":"Features","nav.how":"How it works","nav.themes":"Themes","nav.faq":"FAQ",
-    "hero.pill":"✨ Free · Open source · Windows",
+    "hero.pill":"✨ Free · Open source · Windows & macOS",
     "hero.title":'Read any <span class="grad">Chinese</span> message — just copy it',
     "hero.lead":"Right-click a message in WeChat, LINE, Zalo… choose Copy, and pinyin appears right next to your cursor — with tone marks, tone colors and correct readings for polyphonic characters.",
     "cta.download":"Download for Windows","cta.free":"Free · no admin rights needed","cta.how":"See how it works",
-    "meta.1":"Works offline","meta.2":"No ads","meta.3":"Windows 10 / 11",
+    "cta.mac":"Download for macOS","cta.macSub":"macOS 13+ · Apple silicon & Intel",
+    "meta.1":"Works offline","meta.2":"No ads","meta.3":"Windows 10 / 11","meta.4":"macOS 13+",
     "demo.reply":"Got it, thanks 👍","demo.reply2":"Reply","demo.copy":"Copy","demo.forward":"Forward","demo.delete":"Delete",
-    "f.kicker":"Features","f.title":"Small, focused, never in your way","f.sub":"GenPiYi sits quietly in the system tray and only shows up when you need it.",
+    "f.kicker":"Features","f.title":"Small, focused, never in your way","f.sub":"GenPiYi sits quietly in the system tray (Windows) or menu bar (macOS) and only shows up when you need it.",
     "f1.t":"Copy to see pinyin","f1.d":"Right-click → Copy in your chat app and the popup appears next to the cursor. No extra windows.",
     "f2.t":"Works with your chat apps","f2.d":"WeChat, WeCom, LINE, Telegram, QQ, DingTalk, Feishu, WhatsApp, Messenger, Discord, Zalo… auto-detected, toggle each one.",
-    "f3.t":"Hotkey everywhere","f3.d":"Select text in a browser, Word, a PDF… and press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>P</kbd>.",
+    "f3.t":"Hotkey everywhere","f3.d":"Select text in a browser, Word, a PDF… and press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>P</kbd> (Mac: <kbd>⌃</kbd>+<kbd>⌥</kbd>+<kbd>P</kbd>).",
     "f4.t":"Context-aware readings","f4.d":'Polyphonic characters read correctly: <span class="hz">银行</span> yínháng, <span class="hz">行走</span> xíngzǒu. Hover to see alternatives.',
     "f5.t":"Tone colors","f5.d":"Each tone has its own color — great for learners. Choose tone marks (nǐ hǎo) or numbers (ni3 hao3).",
     "f6.t":"Private & offline","f6.d":"No account, no data leaves your PC. Fully open source on GitHub.",
     "h.kicker":"How it works","h.title":"3 steps, under a minute",
-    "s1.t":"Download & install","s1.d":"Get GenPiYi-Setup.exe, open it and click Install. No admin rights, nothing else to install.",
-    "s2.t":"Right-click → Copy","s2.d":"In WeChat, LINE, Zalo… right-click a Chinese message and choose Copy / 复制.",
+    "s1.t":"Download & install","s1.d":"Windows: get GenPiYi-Setup.exe, open it and click Install. macOS: get the .dmg and drag GenPiYi into Applications. Nothing else to install.",
+    "s2.t":"Right-click → Copy","s2.d":"In WeChat, LINE, Zalo… right-click a Chinese message and choose Copy / 复制 (on a Mac you can also select it and press ⌘C).",
     "s3.t":"Read the pinyin","s3.d":"The popup appears next to your cursor. Copy the pinyin, pin the popup, or click outside to close — you can keep typing.",
     "t.kicker":"Themes","t.title":"8 popup themes to choose from","t.sub":"From minimal to cute. Tap one to preview:",
-    "d.title":"Ready to try it?","d.sub":"Free forever. Download the installer, click Install, then copy any Chinese message.",
+    "d.title":"Ready to try it?","d.sub":"Free forever. Download, install, then copy any Chinese message.",
+    "d.winReq":"Windows 10 / 11 · x64 & ARM64","d.macReq":"macOS 13 Ventura or later · Apple silicon & Intel",
+    "cta.dmg":"Download for Mac (.dmg)","cta.zip":"Zipped .zip",
+    "d.macNote":"Mac says it can't open the app? Go to <b>System Settings → Privacy & Security → Open Anyway</b>. The app isn't notarized by Apple yet — it's not a virus.",
     "cta.download2":"Download installer (.exe)","cta.other":"Portable / ARM64",
-    "d.note":"Seeing “Windows protected your PC”? Click <b>More info → Run anyway</b>. The app isn't code-signed yet — it's not a virus.",
+    "d.note":"“Windows protected your PC”? Click <b>More info → Run anyway</b>. The app isn't code-signed yet — it's not a virus.",
     "q.kicker":"FAQ","q.title":"Frequently asked questions",
     "q1.q":"Is GenPiYi free?","q1.a":"Yes — completely free and open source (MIT license). No ads, no paid tier.",
     "q2.q":"Why does Windows warn me when I open the installer?","q2.a":"Windows SmartScreen warns about any software without a paid code-signing certificate. Click “More info” → “Run anyway”. All source code is public on GitHub.",
     "q3.q":"Does it read my messages?","q3.a":"No. GenPiYi only reads the text you just copied to show its pinyin, processes it locally and never stores or sends it. The app doesn't connect to the Internet.",
-    "q4.q":"My chat app isn't listed?","q4.a":"Open that chat app, then in GenPiYi Settings choose “Add another open app” and click Add. Or use the Ctrl+Alt+P hotkey — it works in any app.",
-    "q5.q":"Is there a macOS or mobile version?","q5.a":"Only Windows 10/11 for now. Want to help build one? Come say hi on GitHub!",
-    "q6.q":"How do I uninstall it?","q6.a":"Settings → Apps → Installed apps, find GenPiYi and click Uninstall — like any other program.",
+    "q4.q":"My chat app isn't listed?","q4.a":"Open that chat app, then in GenPiYi Settings choose “Add another open app” and click Add. Or use the Ctrl+Alt+P hotkey (Mac: ⌃⌥P) — it works in any app.",
+    "q7.q":"My Mac says GenPiYi can't be opened?","q7.a":"The app isn't notarized by Apple yet, so macOS blocks the first launch. Go to <b>System Settings → Privacy & Security</b>, scroll down and click <b>Open Anyway</b>. For the hotkey to copy the selected text, allow GenPiYi under <b>Accessibility</b> on the same page.",
+    "q5.q":"Is there a macOS or mobile version?","q5.a":"Yes, there's a macOS version (macOS 13+, Apple silicon & Intel) — it lives in the menu bar and works just like the Windows app. No mobile version yet; want to help build one? Come say hi on GitHub!",
+    "q6.q":"How do I uninstall it?","q6.a":"Windows: Settings → Apps → Installed apps, find GenPiYi and click Uninstall. macOS: click the 拼 menu-bar icon → Quit, then drag GenPiYi from Applications to the Trash.",
     "foot.lic":"Open source, MIT license","foot.bug":"Report a bug","foot.contrib":"Contribute",
     "copied":"Copy", "ver":"Latest version", "size":"Free · {size} · no admin rights needed"
   }
@@ -459,20 +486,49 @@ function renderChips() {
   box.querySelectorAll(".chip").forEach(b => b.onclick = () => { activeTheme = b.dataset.t; renderChips(); renderPopups(); });
 }
 
-/* ---------------- Link tải trực tiếp bộ cài mới nhất (GitHub API) ---------------- */
+/* ---------------- Link tải trực tiếp bản mới nhất (GitHub API) ----------------
+   Bản Windows dùng tag v…, bản macOS dùng tag mac-v… → lấy danh sách release và chọn riêng từng bản. */
+let winRel = null, macRel = null;
+const isMac = /Macintosh|MacIntel/.test((navigator.platform || "") + " " + (navigator.userAgent || "")) && !/iPhone|iPad/.test(navigator.userAgent || "");
 function renderRelease() {
-  if (!release) return;
-  const setup = release.assets.find(a => /Setup.*\.exe$/i.test(a.name)) || release.assets.find(a => /win-x64\.exe$/i.test(a.name));
-  document.getElementById("ver").textContent = `${t("ver")}: ${release.tag_name}`;
-  if (setup) {
-    const mb = (setup.size / 1048576).toFixed(0) + " MB";
-    document.querySelectorAll(".dl-link").forEach(a => a.href = setup.browser_download_url);
-    const s = document.querySelector(".dl-size");
-    if (s) s.textContent = t("size").replace("{size}", mb);
+  const vers = [];
+  if (winRel) {
+    const setup = winRel.assets.find(a => /Setup.*\.exe$/i.test(a.name)) || winRel.assets.find(a => /win-x64\.exe$/i.test(a.name));
+    vers.push("Windows " + winRel.tag_name);
+    if (setup) {
+      document.querySelectorAll(".dl-win").forEach(a => a.href = setup.browser_download_url);
+      const s = document.querySelector(".dl-size");
+      if (s) s.textContent = t("size").replace("{size}", (setup.size / 1048576).toFixed(0) + " MB");
+    }
   }
+  if (macRel) {
+    const dmg = macRel.assets.find(a => /\.dmg$/i.test(a.name));
+    const zip = macRel.assets.find(a => /macos.*\.zip$/i.test(a.name));
+    vers.push("macOS " + macRel.tag_name.replace(/^mac-/, ""));
+    if (dmg) document.querySelectorAll(".dl-mac").forEach(a => a.href = dmg.browser_download_url);
+    if (zip) document.querySelectorAll(".dl-mac-zip").forEach(a => a.href = zip.browser_download_url);
+  }
+  if (vers.length) document.getElementById("ver").textContent = `${t("ver")}: ${vers.join(" · ")}`;
 }
-fetch("https://api.github.com/repos/dung-nguyentrung/genpiyi/releases/latest")
-  .then(r => r.ok ? r.json() : null).then(j => { if (j && j.assets) { release = j; renderRelease(); } }).catch(() => {});
+function suggestPlatform() {
+  // Người dùng Mac thấy nút macOS nổi bật trước
+  if (!isMac) return;
+  const win = document.getElementById("heroWin"), mac = document.getElementById("heroMac");
+  win.classList.replace("btn-primary", "btn-ghost"); mac.classList.replace("btn-ghost", "btn-primary");
+  mac.parentNode.insertBefore(mac, win);
+  const plats = document.querySelectorAll(".plat");
+  plats[1].classList.add("suggest"); plats[1].parentNode.insertBefore(plats[1], plats[0]);
+}
+suggestPlatform();
+fetch("https://api.github.com/repos/dung-nguyentrung/genpiyi/releases?per_page=30")
+  .then(r => r.ok ? r.json() : null)
+  .then(list => {
+    if (!Array.isArray(list)) return;
+    const pub = list.filter(r => !r.draft && !r.prerelease && Array.isArray(r.assets));
+    winRel = pub.find(r => !/^mac-/i.test(r.tag_name) && r.assets.some(a => /\.exe$/i.test(a.name))) || null;
+    macRel = pub.find(r => r.assets.some(a => /\.dmg$/i.test(a.name))) || null;
+    renderRelease();
+  }).catch(() => {});
 
 /* ---------------- Khởi tạo ---------------- */
 document.querySelectorAll(".lang button").forEach(b => b.onclick = () => applyLang(b.dataset.lang));
