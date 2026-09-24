@@ -13,7 +13,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>GenPiYi.ico</ApplicationIcon>
     <Product>GenPiYi</Product>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <Authors>GenPiYi contributors</Authors>
     <Description>Pinyin popup for Chinese chat messages on Windows</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

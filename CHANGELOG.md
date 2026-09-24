@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/), versions follow [SemVer](https://semver.org/).
 
+## [0.0.3] - 2026-09-24 (Windows) · mac-v0.1.1 (macOS)
+
+### Added
+- **Word meanings, offline**: the popup (and the lookup page) lists each word of the message with its **Vietnamese and/or English meaning** and its **Sino-Vietnamese reading** (银行 → *ngân hàng* · NGÂN HÀNG). Shown under the plain pinyin; toggle it with the book button.
+- Words are segmented with the dictionary: hovering a character highlights the whole word and shows its meaning.
+- Settings: show/hide meanings, meaning language (Vietnamese / English / both), Sino-Vietnamese readings on/off.
+- Dictionary data built by `tools/build_dict.py` from CVDICT and CC-CEDICT (CC BY-SA 4.0) and Unihan; see `data/README.md`.
+- **macOS app** (menu bar, macOS 13+, Apple silicon & Intel) with the same features as the Windows app. First macOS release was `mac-v0.1.0`; `mac-v0.1.1` adds word meanings.
+- Landing page: macOS download, platform-aware download buttons.
+
 ## [0.0.2] - 2026-09-23
 
 ### Added
